@@ -273,43 +273,68 @@ const data = {
         }
     ],
     bookIdsByAuthorIds: {
-        1: [1, 2, 3, 4, 5, 6, 7],
-        2: [8, 9, 10, 11, 12, 13, 14, 15],
-        3: [16, 17, 18, 19, 20]
+        "1": ["1", "2", "3", "4", "5", "6", "7"],
+        "2": ["8", "9", "10", "11", "12", "13", "14", "15"],
+        "3": ["16", "17", "18", "19", "20"]
     }
 };
+
+const toIndex = (id) => parseInt(id, 10) - 1;
+const toID = (index) => `${index + 1}`
+
 const getAuthorIdByBookId = bookId =>
-    parseInt(
-        Object.entries(data.bookIdsByAuthorIds).find(([authorId, bookIds]) =>
-            bookIds.includes(bookId)
-        )[0],
-        10
-    );
+    Object.entries(data.bookIdsByAuthorIds).find(([authorId, bookIds]) =>
+        bookIds.includes(bookId)
+    )
 
-const getBookById = id => ({
-    ...data.books[id - 1],
-    id,
-    authorId: getAuthorIdByBookId(id)
-});
+const getBookById = id => {
+    const index = toIndex(id)
+    if (index < 0 || index > data.books.length) {
+        return null;
+    }
+    return {
+        ...data.books[toIndex(id)],
+        id,
+        authorId: getAuthorIdByBookId(id)
+    }
+};
+
+
 const getAllBooks = () =>
-    data.books.map((book, index) => getBookById(index + 1));
+    data.books.map((book, index) => getBookById(toID(index)));
 
-const getAuthorById = id => ({
-    ...data.authors[id - 1],
-    id,
-    bookIds: data.bookIdsByAuthorIds[id]
-});
+const getAuthorById = id => {
+    const index = toIndex(id)
+
+    if (index < 0 || index > data.authors.length) {
+        return null;
+    }
+
+    return {
+        ...data.authors[toIndex(id)],
+        id,
+        bookIds: data.bookIdsByAuthorIds[id]
+    }
+};
 
 const getAllAuthors = () =>
-    data.authors.map((author, index) => getAuthorById(index + 1));
+    data.authors.map((author, index) => getAuthorById(toID(index)));
 
-const getUserById = id => ({
-    ...data.users[id - 1],
-    id
-});
+const getUserById = id => {
+    const index = toIndex(id)
+
+    if (index < 0 || index > data.users.length) {
+        return null;
+    }
+
+    return {
+        ...data.users[toIndex(id)],
+        id
+    }
+};
 
 const getAllUsers = () =>
-    data.users.map((user, index) => getUserById(index + 1));
+    data.users.map((user, index) => getUserById(toID(index)));
 
 function getRandomIntBook() {
     const min = 1;
