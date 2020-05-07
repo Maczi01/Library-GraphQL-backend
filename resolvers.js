@@ -5,8 +5,10 @@ const resolvers = {
     Query: {
         books: (rootValue, {searchQuery}, {db, search}) =>
             searchQuery.length > 0 ? search.findBooks(searchQuery) : db.getAllBooks(),
-        authors: (rootValue, args, {db}) => db.getAllAuthors(),
-        users: (rootValue, args, {db}) => db.getAllUsers(),
+        authors: (rootValue, {searchQuery}, {db, search}) =>
+            searchQuery.length > 0 ? search.findAuthors(searchQuery) : db.getAllAuthors(),
+        users: (rootValue, {searchQuery}, {db, search}) =>
+            searchQuery.length > 0 ? search.findUsers(searchQuery) : db.getAllUsers(),
         book: (rootValue, {id}, {db}) => db.getBookById(toDatabaseID(id)),
         user: (rootValue, {id}, {db}) => db.getUserById(toDatabaseID(id)),
         author: (rootValue, {id}, {db}) => db.getAuthorById(toDatabaseID(id)),

@@ -4,9 +4,9 @@ const typeDefs = gql`
         query: Query
     }
     type Query {
-        authors: [Author!]!
+        authors(searchQuery: String! = ""): [Author!]!
         books(searchQuery: String! = ""): [Book!]!
-        users: [User!]!
+        users(searchQuery: String! = ""): [User!]!
         randomBook: Book!
         randomUser: User!
         randomAuthor: Author!
