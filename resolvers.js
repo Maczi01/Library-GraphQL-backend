@@ -1,5 +1,9 @@
-const toDatabaseID = externalID => Buffer.from(externalID, "base64").toString();
-const toExternalID = databaseID => Buffer.from(databaseID).toString("base64");
+const decodeBase64 = base64String => Buffer.from(base64String, "base64").toString();
+const encodeBase64 = rawString => Buffer.from(rawString).toString("base64");
+
+const toExternalId = (dbId, type) => encodeBase64(`${type}-${dbId}`);
+const toTypeAndDbId = externalId => decodeBase64(externalId).split("-", 2);
+const toDbId = externalId => toTypeAndDbId(externalId)[1];
 
 const resolvers = {
     Query: {
@@ -9,22 +13,22 @@ const resolvers = {
             searchQuery.length > 0 ? search.findAuthors(searchQuery) : db.getAllAuthors(),
         users: (rootValue, {searchQuery}, {db, search}) =>
             searchQuery.length > 0 ? search.findUsers(searchQuery) : db.getAllUsers(),
-        book: (rootValue, {id}, {db}) => db.getBookById(toDatabaseID(id)),
-        user: (rootValue, {id}, {db}) => db.getUserById(toDatabaseID(id)),
-        author: (rootValue, {id}, {db}) => db.getAuthorById(toDatabaseID(id)),
+        book: (rootValue, {id}, {db}) => db.getBookById(toDbId(id)),
+        user: (rootValue, {id}, {db}) => db.getUserById(toDbId(id)),
+        author: (rootValue, {id}, {db}) => db.getAuthorById(toDbId(id)),
         randomUser: (rootValue, args, {db}) => db.getRandomUser(),
         randomBook: (rootValue, args, {db}) => db.getRandomBook(),
         randomAuthor: (rootValue, args, {db}) => db.getRandomAuthor(),
     },
     Book: {
-        id: book => toExternalID(book.id),
+        id: book => toExternalId(book.id, "Book"),
         author: (book, args, {db}) => db.getAuthorById(book.authorId),
         cover: book => ({
             path: book.coverPath
         })
     },
     Author: {
-        id: author => toExternalID(author.id),
+        id: author => toExternalId(author.id, "Author"),
         books: (author, args, {db}) => author.bookIds.map(db.getBookById),
         photo: author => ({
             path: author.photoPath
@@ -39,7 +43,7 @@ const resolvers = {
         url: (image, args, {baseAssetsUrl}) => baseAssetsUrl + image.path
     },
     User: {
-        id: user => toExternalID(user.id),
+        id: user => toExternalId(user.id, "User")
     }
 };
 
