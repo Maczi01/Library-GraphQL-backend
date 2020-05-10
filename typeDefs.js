@@ -13,7 +13,11 @@ const typeDefs = gql`
         book(id: ID!): Book
         author(id: ID!): Author
         user(id: ID!): User
+        anything(id: ID!): Anything
+        everything: [Anything!]!
     }
+#    union Everyting = on Book, User, Author]
+    union Anything= User | Author | Book
     type Author {
         id: ID!
         name: String!
