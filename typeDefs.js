@@ -16,7 +16,6 @@ const typeDefs = gql`
         anything(id: ID!): Anything
         everything: [Anything!]!
     }
-#    union Everyting = on Book, User, Author]
     union Anything= User | Author | Book
     type Author {
         id: ID!

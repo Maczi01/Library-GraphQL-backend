@@ -38,13 +38,7 @@ const resolvers = {
             randomUser: (rootValue, args, {db}) => db.getRandomUser(),
             randomBook: (rootValue, args, {db}) => db.getRandomBook(),
             randomAuthor: (rootValue, args, {db}) => db.getRandomAuthor(),
-            // everything:(rootValue, args, {db}) =>[db.getAllBooks().concat(db.getAllAuthors())]
-            // everything:(rootValue, args, {db}) =>db.getAllBooks()
             everything: (rootValue, args, {db}) => getEverything(db)
-            // [
-            //
-            // ]
-            // [db.getAllBooks().concat(db.getAllAuthors())]
         },
         Book: {
             id: book => toExternalId(book.id, "Book"),
@@ -80,10 +74,6 @@ const resolvers = {
         },
         Anything: {
             __resolveType: (anything) => {
-                if(anything.title && anything.info && anything.bio){
-                    return "Anything"
-                }
-
                 if (anything.title) {
                     return "Book"
                 }
