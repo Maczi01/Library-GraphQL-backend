@@ -1,6 +1,5 @@
 const decodeBase64 = base64String => Buffer.from(base64String, "base64").toString();
 const encodeBase64 = rawString => Buffer.from(rawString).toString("base64");
-
 const toExternalId = (dbId, type) => encodeBase64(`${type}-${dbId}`);
 const toTypeAndDbId = externalId => decodeBase64(externalId).split("-", 2);
 const toDbId = externalId => toTypeAndDbId(externalId)[1];
@@ -58,6 +57,9 @@ const resolvers = {
                 author => ({
                     path: author.photoPath
                 })
+        },
+        User: {
+            id: user => toExternalId(user.id, "User")
         }
         ,
         Avatar: {
@@ -68,9 +70,6 @@ const resolvers = {
         ,
         Image: {
             url: (image, args, {baseAssetsUrl}) => baseAssetsUrl + image.path
-        },
-        User: {
-            id: user => toExternalId(user.id, "User")
         },
         Anything: {
             __resolveType: (anything) => {

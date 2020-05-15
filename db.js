@@ -281,11 +281,19 @@ const data = {
 
 const toIndex = (id) => parseInt(id, 10) - 1;
 const toID = (index) => `${index + 1}`
+//
+// const getAuthorIdByBookId = bookId =>
+//     Object.entries(data.bookIdsByAuthorIds).find(([authorId, bookIds]) =>
+//         bookIds.includes(bookId)
+//     )
 
 const getAuthorIdByBookId = bookId =>
-    Object.entries(data.bookIdsByAuthorIds).find(([authorId, bookIds]) =>
-        bookIds.includes(bookId)
-    )
+    parseInt(
+        Object.entries(data.bookIdsByAuthorIds).find(([authorId, bookIds]) =>
+            bookIds.includes(bookId)
+        )[0],
+        10
+    );
 
 const getBookById = id => {
     const index = toIndex(id)
