@@ -1,22 +1,28 @@
-const decodeBase64 = base64String => Buffer.from(base64String, "base64").toString();
+const decodeBase64 = base64String =>
+    Buffer.from(base64String, "base64").toString();
 const encodeBase64 = rawString => Buffer.from(rawString).toString("base64");
+
 const toExternalId = (dbId, type) => encodeBase64(`${type}-${dbId}`);
 const toTypeAndDbId = externalId => decodeBase64(externalId).split("-", 2);
 const toDbId = externalId => toTypeAndDbId(externalId)[1];
 
 const getAnythingByExternalID = (externalId, db) => {
     const [type, dbId] = toTypeAndDbId(externalId);
+
     switch (type) {
-        case "Book":
+        case "Book": {
             return db.getBookById(dbId);
-        case "User":
-            return db.getUserById(dbId);
-        case "Author":
+        }
+        case "Author": {
             return db.getAuthorById(dbId);
+        }
+        case "User": {
+            return db.getUserById(dbId);
+        }
         default:
             return null;
     }
-}
+};
 
 const getEverything = (db) => (
     [...db.getAllBooks(), ...db.getAllAuthors(), ...db.getAllUsers()]
@@ -74,15 +80,15 @@ const resolvers = {
         Anything: {
             __resolveType: (anything) => {
                 if (anything.title) {
-                    return "Book"
-                }
-                if (anything.info) {
-                    return "Author"
+                    return "Book";
                 }
                 if (anything.bio) {
-                    return "User"
-                } else
-                    return null;
+                    return "Author";
+                }
+                if (anything.info) {
+                    return "User";
+                }
+                return null;
             }
         }
     }

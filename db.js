@@ -281,11 +281,6 @@ const data = {
 
 const toIndex = (id) => parseInt(id, 10) - 1;
 const toID = (index) => `${index + 1}`
-//
-// const getAuthorIdByBookId = bookId =>
-//     Object.entries(data.bookIdsByAuthorIds).find(([authorId, bookIds]) =>
-//         bookIds.includes(bookId)
-//     )
 
 const getAuthorIdByBookId = bookId =>
     parseInt(
@@ -295,73 +290,47 @@ const getAuthorIdByBookId = bookId =>
         10
     );
 
-const getBookById = id => {
-    const index = toIndex(id)
-    if (index < 0 || index > data.books.length) {
-        return null;
-    }
-    return {
-        ...data.books[toIndex(id)],
-        id,
-        authorId: getAuthorIdByBookId(id)
-    }
-};
+const getBookById = id => ({
+    ...data.books[toIndex(id)],
+    id,
+    authorId: getAuthorIdByBookId(id)
+})
 
 
-const getAllBooks = () =>
-    data.books.map((book, index) => getBookById(toID(index)));
+const getAllBooks = () => data.books.map((book, index) => getBookById(toID(index)));
 
-const getAuthorById = id => {
-    const index = toIndex(id)
 
-    if (index < 0 || index > data.authors.length) {
-        return null;
-    }
+const getAuthorById = id => ({
+    ...data.authors[toIndex(id)],
+    id,
+    bookIds: data.bookIdsByAuthorIds[id]
+});
 
-    return {
-        ...data.authors[toIndex(id)],
-        id,
-        bookIds: data.bookIdsByAuthorIds[id]
-    }
-};
 
-const getAllAuthors = () =>
-    data.authors.map((author, index) => getAuthorById(toID(index)));
+const getAllAuthors = () => data.authors.map((author, index) => getAuthorById(toID(index)));
 
-const getUserById = id => {
-    const index = toIndex(id)
+const getUserById = id => ({
+    ...data.users[toIndex(id)],
+    id
+});
 
-    if (index < 0 || index > data.users.length) {
-        return null;
-    }
+const getAllUsers = () => data.users.map((user, index) => getUserById(toID(index)));
 
-    return {
-        ...data.users[toIndex(id)],
-        id
-    }
-};
-
-const getAllUsers = () =>
-    data.users.map((user, index) => getUserById(toID(index)));
-
-function getRandomIntBook() {
+const getRandomIntBook = () => {
     const min = 1;
     const max = data.books.length;
     return Math.floor(Math.random() * (max - min)) + min;
 }
-
-function getRandomIntUser() {
+const getRandomIntUser = () => {
     const min = 1;
     const max = data.users.length;
     return Math.floor(Math.random() * (max - min)) + min;
 }
-
-function getRandomIntAuthor() {
+const getRandomIntAuthor = () => {
     const min = 1;
     const max = data.authors.length;
     return Math.floor(Math.random() * (max - min)) + min;
 }
-
 const getRandomBook = () => data.books[getRandomIntBook()];
 const getRandomUser = () => data.users[getRandomIntUser()];
 const getRandomAuthor = () => data.authors[getRandomIntAuthor()];
