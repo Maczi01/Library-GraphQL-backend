@@ -19,13 +19,16 @@ const getAnythingByExternalID = (externalId, db) => {
         case "User": {
             return db.getUserById(dbId);
         }
+        case "BookCopy": {
+            return db.getBookCopyById(dbId);
+        }
         default:
             return null;
     }
 };
 
 const getEverything = (db) => (
-    [...db.getAllBooks(), ...db.getAllAuthors(), ...db.getAllUsers()]
+    [...db.getAllBooks(), ...db.getAllAuthors(), ...db.getAllUsers(), ...db.getAllBookCopies()]
 )
 
 const resolvers = {
@@ -52,7 +55,9 @@ const resolvers = {
             cover:
                 book => ({
                     path: book.coverPath
-                })
+                }),
+            copies:  (book, args, {db}) => db.getBookCopiesByBookId(book.id),
+
         }
         ,
         Author: {
@@ -65,7 +70,15 @@ const resolvers = {
                 })
         },
         User: {
-            id: user => toExternalId(user.id, "User")
+            id: user => toExternalId(user.id, "User"),
+            ownedBookCopies: (bookCopy, args, {db}) => db.getAllBookCopies().filter(user => user.id === bookCopy.ownerId),
+            borrowedBookCopies: (bookCopy, args, {db}) => db.getAllBookCopies().filter(user => user.id === bookCopy.borrowerId)
+        },
+        BookCopy: {
+            id: bookCopy => toExternalId(bookCopy.id, "BookCopy"),
+            owner: (bookCopy, args, {db}) => db.getUserById(bookCopy.ownerId),
+            book: (bookCopy, args, {db}) => db.getBookById(bookCopy.bookId),
+            borrower: (bookCopy, args, {db}) => bookCopy.borrowerId && db.getUserById(bookCopy.borrowerId),
         }
         ,
         Avatar: {
@@ -79,6 +92,9 @@ const resolvers = {
         },
         Anything: {
             __resolveType: (anything) => {
+                if (anything.ownerId) {
+                    return "BookCopy";
+                }
                 if (anything.title) {
                     return "Book";
                 }
