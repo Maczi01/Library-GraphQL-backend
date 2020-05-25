@@ -325,7 +325,7 @@ const data = {
             },
             {
                 ownerId: "2",
-                borrowerId: "4",
+                w: "4",
                 bookId: "10"
             },
             {
@@ -465,6 +465,9 @@ const getBookCopyById = id => ({
 const getAllBookCopies = () => data.bookCopies.map((bookCopy, index) => getBookCopyById(toID(index)));
 
 const getBookCopiesByBookId = (bookId) => db.getAllBookCopies().filter(bookCopy => bookCopy.id === bookId)
+const getBorrowedBookCopiesByUserId = (userId) => db.getAllBookCopies().filter(bookCopy => bookCopy.borrowerId === userId)
+const getOwnedBookCopiesByUserId = (userId) => db.getAllBookCopies().filter(bookCopy => bookCopy.ownerId === userId)
+
 
 const db = {
     getAllBooks,
@@ -478,6 +481,8 @@ const db = {
     getRandomAuthor,
     getAllBookCopies,
     getBookCopyById,
-    getBookCopiesByBookId
+    getBookCopiesByBookId,
+    getBorrowedBookCopiesByUserId,
+    getOwnedBookCopiesByUserId
 };
 module.exports = db;

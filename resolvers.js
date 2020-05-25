@@ -71,8 +71,8 @@ const resolvers = {
         },
         User: {
             id: user => toExternalId(user.id, "User"),
-            ownedBookCopies: (bookCopy, args, {db}) => db.getAllBookCopies().filter(user => user.id === bookCopy.ownerId),
-            borrowedBookCopies: (bookCopy, args, {db}) => db.getAllBookCopies().filter(user => user.id === bookCopy.borrowerId)
+            ownedBookCopies: (user, args, {db}) => db.getBorrowedBookCopiesByUserId(user.id),
+            borrowedBookCopies: (user, args, {db}) => db.getOwnedBookCopiesByUserId(user.id),
         },
         BookCopy: {
             id: bookCopy => toExternalId(bookCopy.id, "BookCopy"),
