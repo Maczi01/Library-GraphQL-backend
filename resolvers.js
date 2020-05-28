@@ -8,7 +8,6 @@ const toDbId = externalId => toTypeAndDbId(externalId)[1];
 
 const getAnythingByExternalID = (externalId, db) => {
     const [type, dbId] = toTypeAndDbId(externalId);
-
     switch (type) {
         case "Book": {
             return db.getBookById(dbId);

@@ -464,22 +464,22 @@ const getBookCopiesByBookId = (bookId) => db.getAllBookCopies().filter(bookCopy 
 const getBorrowedBookCopiesByUserId = (userId) => db.getAllBookCopies().filter(bookCopy => bookCopy.borrowerId === userId);
 const getOwnedBookCopiesByUserId = (userId) => db.getAllBookCopies().filter(bookCopy => bookCopy.ownerId === userId);
 
-const borrowBookCopy = (bookCopyId, borrowerId) =>{
+const borrowBookCopy = (bookCopyId, borrowerId) => {
     const index = toIndex(bookCopyId);
-    const borrower = toIndex(borrowerId);
-    if(index < 0 || index >= data.bookCopies.length){
+    if (index < 0 || index >= data.bookCopies.length) {
         throw new Error("Could not find book copy")
     }
-    if(borrower < 0 || borrower >= data.bookCopies.length){
-        throw new Error("Could not find book copy")
+    if (borrowerId < 0 || borrowerId >= data.bookCopies.length) {
+        throw new Error("Could not find user")
     }
     const bookCopy = data.bookCopies[index];
-    if(!!bookCopy.borrowerId){
+    if (!!bookCopy.borrowerId) {
         throw new Error("Book already borrowed");
     }
+    if (bookCopy.ownerId === borrowerId) {
+        throw new Error("You can't borrow your book!")
+    }
     bookCopy.borrowerId = borrowerId;
-
-
 }
 
 const db = {
