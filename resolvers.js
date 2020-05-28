@@ -48,6 +48,12 @@ const resolvers = {
             randomAuthor: (rootValue, args, {db}) => db.getRandomAuthor(),
             everything: (rootValue, args, {db}) => getEverything(db)
         },
+        Mutation: {
+            borrowBookCopy: (rootValue, {id}, {db}) => {
+                db.borrowBookCopy(toDbId(id), "2")
+                return db.getBookCopyById(toDbId(id));
+            }
+        },
         Book: {
             id: book => toExternalId(book.id, "Book"),
             author:
@@ -56,7 +62,7 @@ const resolvers = {
                 book => ({
                     path: book.coverPath
                 }),
-            copies:  (book, args, {db}) => db.getBookCopiesByBookId(book.id),
+            copies: (book, args, {db}) => db.getBookCopiesByBookId(book.id),
 
         }
         ,
@@ -71,8 +77,8 @@ const resolvers = {
         },
         User: {
             id: user => toExternalId(user.id, "User"),
-            ownedBookCopies: (user, args, {db}) => db.getBorrowedBookCopiesByUserId(user.id),
-            borrowedBookCopies: (user, args, {db}) => db.getOwnedBookCopiesByUserId(user.id),
+            ownedBookCopies: (user, args, {db}) => db.getOwnedBookCopiesByUserId(user.id),
+            borrowedBookCopies: (user, args, {db}) => db.getBorrowedBookCopiesByUserId(user.id),
         },
         BookCopy: {
             id: bookCopy => toExternalId(bookCopy.id, "BookCopy"),
