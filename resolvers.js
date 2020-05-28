@@ -48,8 +48,12 @@ const resolvers = {
             everything: (rootValue, args, {db}) => getEverything(db)
         },
         Mutation: {
-            borrowBookCopy: (rootValue, {id}, {db}) => {
-                db.borrowBookCopy(toDbId(id), "2")
+            borrowBookCopy: (rootValue, {id}, {db, currentUserDbId}) => {
+                db.borrowBookCopy(toDbId(id), currentUserDbId)
+                return db.getBookCopyById(toDbId(id));
+            },
+            returnBookCopy: (rootValue, {id}, {db, currentUserDbId}) => {
+                db.returnBookCopy(toDbId(id), currentUserDbId)
                 return db.getBookCopyById(toDbId(id));
             }
         },
