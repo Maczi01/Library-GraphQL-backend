@@ -49,12 +49,15 @@ const resolvers = {
         },
         Mutation: {
             borrowBookCopy: (rootValue, {id}, {db, currentUserDbId}) => {
-                db.borrowBookCopy(toDbId(id), currentUserDbId)
+                db.borrowBookCopy(toDbId(id), currentUserDbId);
                 return db.getBookCopyById(toDbId(id));
             },
             returnBookCopy: (rootValue, {id}, {db, currentUserDbId}) => {
-                db.returnBookCopy(toDbId(id), currentUserDbId)
+                db.returnBookCopy(toDbId(id), currentUserDbId);
                 return db.getBookCopyById(toDbId(id));
+            },
+            borrowRandomBook: (rootValue, {id}, {db, currentUserDbId}) => {
+                return db.borrowRandom(currentUserDbId)
             }
         },
         Book: {
@@ -66,7 +69,6 @@ const resolvers = {
                     path: book.coverPath
                 }),
             copies: (book, args, {db}) => db.getBookCopiesByBookId(book.id),
-
         }
         ,
         Author: {
