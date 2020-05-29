@@ -5,7 +5,7 @@
 Backend server on Heroku: https://nameless-tundra-75396.herokuapp.com/
 Frontend available on zeit now: [demo](https://library.maczi01.now.sh/)
 
-![screenshot](https://github.com/Maczi01/WheaterApp/blob/master/src/assets/img/index.png?raw=true)
+![screenshot](https://github.com/Maczi01/Library-GraphQL-backend/blob/master/assets/Playground.png)
 
 
 
