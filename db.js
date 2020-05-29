@@ -507,7 +507,7 @@ const borrowRandom = (borrowerId) => {
         const max = freeCopies.length;
         return Math.floor(Math.random() * (max - min)) + min;
     }
-    if (freeBooks.length === 0) {
+    if (freeCopies.length === 0) {
         return null;
     } else {
         const random = randomNumber();
