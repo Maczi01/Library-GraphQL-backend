@@ -5,7 +5,7 @@ const encodeBase64 = rawString => Buffer.from(rawString).toString("base64");
 const toExternalId = (dbId, type) => encodeBase64(`${type}-${dbId}`);
 const toTypeAndDbId = externalId => decodeBase64(externalId).split("-", 2);
 const toDbId = externalId => toTypeAndDbId(externalId)[1];
-
+const id = resource => toExternalId(resource.id, resource.resourceType);
 const getAnythingByExternalID = (externalId, db) => {
     const [type, dbId] = toTypeAndDbId(externalId);
     switch (type) {
@@ -26,6 +26,11 @@ const getAnythingByExternalID = (externalId, db) => {
     }
 };
 
+const getResourceByExternalId = (externalId, db) => {
+    const [type, dbId] = toTypeAndDbId(externalId);
+    return db.getResourceByIdAndType(type, dbId);
+}
+
 const getEverything = (db) => (
     [...db.getAllBooks(), ...db.getAllAuthors(), ...db.getAllUsers(), ...db.getAllBookCopies()]
 )
@@ -45,7 +50,10 @@ const resolvers = {
             randomUser: (rootValue, args, {db}) => db.getRandomUser(),
             randomBook: (rootValue, args, {db}) => db.getRandomBook(),
             randomAuthor: (rootValue, args, {db}) => db.getRandomAuthor(),
-            everything: (rootValue, args, {db}) => getEverything(db)
+            everything: (rootValue, args, {db}) => getEverything(db),
+            resources: (rootValue, args, {db}) => getEverything(db),
+            resource: (rootValue, {id}, {db}) => getAnythingByExternalID(id, db),
+
         },
         Mutation: {
             borrowBookCopy: (rootValue, {id}, {db, currentUserDbId}) => {
@@ -61,7 +69,7 @@ const resolvers = {
             }
         },
         Book: {
-            id: book => toExternalId(book.id, "Book"),
+            id,
             author:
                 (book, args, {db}) => db.getAuthorById(book.authorId),
             cover:
@@ -72,7 +80,7 @@ const resolvers = {
         }
         ,
         Author: {
-            id: author => toExternalId(author.id, "Author"),
+            id,
             books:
                 (author, args, {db}) => author.bookIds.map(db.getBookById),
             photo:
@@ -81,12 +89,12 @@ const resolvers = {
                 })
         },
         User: {
-            id: user => toExternalId(user.id, "User"),
+            id,
             ownedBookCopies: (user, args, {db}) => db.getOwnedBookCopiesByUserId(user.id),
             borrowedBookCopies: (user, args, {db}) => db.getBorrowedBookCopiesByUserId(user.id),
         },
         BookCopy: {
-            id: bookCopy => toExternalId(bookCopy.id, "BookCopy"),
+            id,
             owner: (bookCopy, args, {db}) => db.getUserById(bookCopy.ownerId),
             book: (bookCopy, args, {db}) => db.getBookById(bookCopy.bookId),
             borrower: (bookCopy, args, {db}) => bookCopy.borrowerId && db.getUserById(bookCopy.borrowerId),
@@ -117,6 +125,9 @@ const resolvers = {
                 }
                 return null;
             }
+        },
+        Resource: {
+            __resolveType: resource => resource.resourceType
         }
     }
 ;

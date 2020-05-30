@@ -415,6 +415,7 @@ const getAuthorIdByBookId = bookId =>
 const getBookById = id => ({
     ...data.books[toIndex(id)],
     id,
+    resourceType: "Book",
     authorId: getAuthorIdByBookId(id)
 })
 
@@ -423,6 +424,7 @@ const getAllBooks = () => data.books.map((book, index) => getBookById(toID(index
 const getAuthorById = id => ({
     ...data.authors[toIndex(id)],
     id,
+    resourceType: "Author",
     bookIds: data.bookIdsByAuthorIds[id]
 });
 
@@ -430,6 +432,7 @@ const getAllAuthors = () => data.authors.map((author, index) => getAuthorById(to
 
 const getUserById = id => ({
     ...data.users[toIndex(id)],
+    resourceType: "User",
     id
 });
 
@@ -455,6 +458,7 @@ const getRandomAuthor = () => data.authors[getRandomIntAuthor()];
 
 const getBookCopyById = id => ({
     ...data.bookCopies[toIndex(id)],
+    resourceType: "BookCopy",
     id,
 });
 
@@ -517,6 +521,25 @@ const borrowRandom = (borrowerId) => {
     }
 };
 
+const getResourceByIdAndType = (type, Id) => {
+    switch (type) {
+        case "Book": {
+            return getBookById(Id);
+        }
+        case "Author": {
+            return getAuthorById(Id);
+        }
+        case "User": {
+            return getUserById(Id);
+        }
+        case "BookCopy": {
+            return getBookCopyById(Id);
+        }
+        default:
+            return null;
+    }
+}
+
 const db = {
     getAllBooks,
     getAllAuthors,
@@ -535,5 +558,6 @@ const db = {
     borrowBookCopy,
     returnBookCopy,
     borrowRandom,
+    getResourceByIdAndType,
 };
 module.exports = db;
