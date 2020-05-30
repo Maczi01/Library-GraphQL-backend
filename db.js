@@ -399,10 +399,10 @@ const data = {
             bookId: "20"
         }
     ]
-}
+};
 
 const toIndex = (id) => parseInt(id, 10) - 1;
-const toID = (index) => `${index + 1}`
+const toID = (index) => `${index + 1}`;
 
 const getAuthorIdByBookId = bookId =>
     parseInt(
@@ -417,7 +417,7 @@ const getBookById = id => ({
     id,
     resourceType: "Book",
     authorId: getAuthorIdByBookId(id)
-})
+});
 
 const getAllBooks = () => data.books.map((book, index) => getBookById(toID(index)));
 
@@ -437,6 +437,7 @@ const getUserById = id => ({
 });
 
 const getAllUsers = () => data.users.map((user, index) => getUserById(toID(index)));
+
 const getRandomIntBook = () => {
     const min = 1;
     const max = data.books.length;
@@ -538,7 +539,7 @@ const getResourceByIdAndType = (type, Id) => {
         default:
             return null;
     }
-}
+};
 
 const db = {
     getAllBooks,

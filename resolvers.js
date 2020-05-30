@@ -53,7 +53,7 @@ const resolvers = {
             everything: (rootValue, args, {db}) => getEverything(db),
             resources: (rootValue, args, {db}) => getEverything(db),
             resource: (rootValue, {id}, {db}) => getAnythingByExternalID(id, db),
-
+            people: (rootValue, {id}, {db}) => [...db.getAllAuthors(), ...db.getAllUsers()]
         },
         Mutation: {
             borrowBookCopy: (rootValue, {id}, {db, currentUserDbId}) => {
@@ -127,6 +127,9 @@ const resolvers = {
             }
         },
         Resource: {
+            __resolveType: resource => resource.resourceType
+        },
+        Person: {
             __resolveType: resource => resource.resourceType
         }
     }

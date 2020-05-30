@@ -18,6 +18,7 @@ const typeDefs = gql`
         everything: [Anything!]!
         resources: [Resource!]!
         resource(id: ID!): Resource!
+        people: [Person!]!
     }
     type Mutation {
         borrowBookCopy(id: ID!): BookCopy!
@@ -28,14 +29,17 @@ const typeDefs = gql`
     interface Resource {
         id: ID!
     }
-    type Author  implements Resource{
+    interface Person {
+        name:String!
+    }
+    type Author implements Resource & Person{
         id: ID!
         name: String!
         photo: Image!
         bio: String!
         books: [Book!]!
     }
-    type Book   implements Resource{
+    type Book implements Resource {
         id: ID!
         title: String!
         cover: Image!
@@ -43,7 +47,7 @@ const typeDefs = gql`
         description: String!
         copies: [BookCopy!]!
     }
-    type User   implements Resource{
+    type User implements Resource & Person{
         id: ID!
         name: String!
         email: String!
