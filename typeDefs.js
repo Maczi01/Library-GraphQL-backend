@@ -14,8 +14,8 @@ const typeDefs = gql`
         book(id: ID!): Book
         author(id: ID!): Author
         user(id: ID!): User
-        anything(id: ID!): Anything
-        everything: [Anything!]!
+        anything(id: ID!): Anything @deprecated(reason: "No longer supported. Use resource instead")
+        everything: [Anything!]! @deprecated(reason: "No longer supported. Use resources instead")
         resources: [Resource!]!
         resource(id: ID!): Resource!
         people: [Person!]!
