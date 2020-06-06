@@ -456,15 +456,12 @@ const getRandomIntAuthor = () => {
 const getRandomBook = () => data.books[getRandomIntBook()];
 const getRandomUser = () => data.users[getRandomIntUser()];
 const getRandomAuthor = () => data.authors[getRandomIntAuthor()];
-
 const getBookCopyById = id => ({
     ...data.bookCopies[toIndex(id)],
     resourceType: "BookCopy",
     id,
 });
-
 const getAllBookCopies = () => data.bookCopies.map((bookCopy, index) => getBookCopyById(toID(index)));
-
 const getBookCopiesByBookId = (bookId) => db.getAllBookCopies().filter(bookCopy => bookCopy.id === bookId);
 const getBorrowedBookCopiesByUserId = (userId) => db.getAllBookCopies().filter(bookCopy => bookCopy.borrowerId === userId);
 const getOwnedBookCopiesByUserId = (userId) => db.getAllBookCopies().filter(bookCopy => bookCopy.ownerId === userId);
@@ -506,19 +503,31 @@ const returnBookCopy = (bookCopyId, borrowerId) => {
 };
 
 const borrowRandom = (borrowerId) => {
-    const freeCopies = data.bookCopies.filter(bookCopy => bookCopy.borrowerId === null);
-    const randomNumber = () => {
-        const min = 1;
-        const max = freeCopies.length;
-        return Math.floor(Math.random() * (max - min)) + min;
-    }
-    if (freeCopies.length === 0) {
-        return null;
-    } else {
-        const random = randomNumber();
-        const randomBook = freeCopies[random];
-        randomBook.borrowerId = borrowerId
+    const array = getArray();
+    const randomBook = pickRandom(array);
+    if (randomBook != null) {
+        randomBook.borrowerId = borrowerId;
         return randomBook;
+    } else {
+        return null;
+    }
+};
+
+const getArray = () => (
+    data.bookCopies.filter(bookCopy => bookCopy.borrowerId === null)
+)
+
+const pickRandom = (array) => {
+    if (array.length) {
+        const randomNumber = () => {
+            const min = 1;
+            const max = array.length;
+            return Math.floor(Math.random() * (max - min)) + min;
+        };
+        const rand = randomNumber();
+        return array[rand]
+    } else {
+        return null
     }
 };
 
