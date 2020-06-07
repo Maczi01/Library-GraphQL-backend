@@ -462,7 +462,8 @@ const getBookCopyById = id => ({
     id,
 });
 const getAllBookCopies = () => data.bookCopies.map((bookCopy, index) => getBookCopyById(toID(index)));
-const getBookCopiesByBookId = (bookId) => db.getAllBookCopies().filter(bookCopy => bookCopy.id === bookId);
+const getBookCopiesByBookId = bookId => getAllBookCopies().filter(bookCopy => bookCopy.bookId === bookId);
+
 const getBorrowedBookCopiesByUserId = (userId) => db.getAllBookCopies().filter(bookCopy => bookCopy.borrowerId === userId);
 const getOwnedBookCopiesByUserId = (userId) => db.getAllBookCopies().filter(bookCopy => bookCopy.ownerId === userId);
 
@@ -503,8 +504,8 @@ const returnBookCopy = (bookCopyId, borrowerId) => {
 };
 
 const borrowRandom = (borrowerId) => {
-    const array = getArray();
-    const randomBook = pickRandom(array);
+    const AvailableBookCopies = getAvailableBookCopies();
+    const randomBook = pickRandom(AvailableBookCopies);
     if (randomBook != null) {
         randomBook.borrowerId = borrowerId;
         return randomBook;
@@ -513,7 +514,7 @@ const borrowRandom = (borrowerId) => {
     }
 };
 
-const getArray = () => (
+const getAvailableBookCopies = () => (
     data.bookCopies.filter(bookCopy => bookCopy.borrowerId === null)
 )
 
