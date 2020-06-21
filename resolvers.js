@@ -82,7 +82,8 @@ const resolvers = {
         Author: {
             id,
             books:
-                (author, args, {db}) => author.bookIds.map(db.getBookById),
+                (author, args, {db}) => db.getBooksByAuthorId(author.id),
+
             photo:
                 author => ({
                     path: author.photoPath
