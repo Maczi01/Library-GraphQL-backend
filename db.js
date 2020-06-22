@@ -519,17 +519,18 @@ const data = {
 };
 
 
-const toIndex = (id) => parseInt(id, 10) - 1;
-
 const findResourceByIdAndType = (id, resourceType) => {
-    const resources = getAllResourcesByType(resourceType);
+    const resources = findAllResourcesByType(resourceType);
     const resource = resources.find(resource => resource.id === id);
     if (!resource) {
         throw new Error(`Couldnt find resource by id ${id}`)
     }
     return resource;
 }
-const getAllResourcesByType = resourceType => {
+
+const getAllResourcesByType = (resourceType) => [...findAllResourcesByType(resourceType)];
+
+const findAllResourcesByType = resourceType => {
     const resources = data[resourceType]
     if (!resources) {
         throw new Error(`Unrecognized resource type ${resourceType}`)
@@ -537,21 +538,22 @@ const getAllResourcesByType = resourceType => {
     return resources;
 }
 
-const getBookById = id => getResourceByIdAndType(id, "Book")
 
-const getAllBooks = () => getAllResourcesByType("Book");
 
 const getBooksByAuthorId = (authorId) => db.getAllBooks().filter(book => book.authorId === authorId);
 
 
-const getAuthorById = id => getResourceByIdAndType(id, "Author")
 
+const getAllBooks = () => getAllResourcesByType("Book");
 const getAllAuthors = () => getAllResourcesByType("Author");
-
-const getUserById = id =>  getResourceByIdAndType(id, "User")
-
-const getBookCopyById = id => getResourceByIdAndType(id, "BookCopy")
 const getAllUsers = () => getAllResourcesByType("User");
+const getAllBookCopies = () => getAllResourcesByType("BookCopy");
+
+const getBookById = id => getResourceByIdAndType(id, "Book")
+const getAuthorById = id => getResourceByIdAndType(id, "Author")
+const getUserById = id =>  getResourceByIdAndType(id, "User")
+const getBookCopyById = id => getResourceByIdAndType(id, "BookCopy")
+
 
 const getRandomIntBook = () => {
     const min = 1;
@@ -572,21 +574,13 @@ const getRandomBook = () => data.books[getRandomIntBook()];
 const getRandomUser = () => data.users[getRandomIntUser()];
 const getRandomAuthor = () => data.authors[getRandomIntAuthor()];
 
-const getAllBookCopies = () => getAllBookCopies("BookCopy");
 const getBookCopiesByBookId = bookId => getAllBookCopies().filter(bookCopy => bookCopy.bookId === bookId);
 
 const getBorrowedBookCopiesByUserId = (userId) => db.getAllBookCopies().filter(bookCopy => bookCopy.borrowerId === userId);
 const getOwnedBookCopiesByUserId = (userId) => db.getAllBookCopies().filter(bookCopy => bookCopy.ownerId === userId);
 
 const borrowBookCopy = (bookCopyId, borrowerId) => {
-    const index = toIndex(bookCopyId);
-    if (index < 0 || index >= data.bookCopies.length) {
-        throw new Error("Could not find book copy")
-    }
-    if (borrowerId < 0 || borrowerId >= data.bookCopies.length) {
-        throw new Error("Could not find user")
-    }
-    const bookCopy = data.bookCopies[index];
+    const bookCopy = findResourceByIdAndType(bookCopyId, "BookCopy")
     if (!!bookCopy.borrowerId) {
         throw new Error("Book already borrowed");
     }
@@ -597,14 +591,7 @@ const borrowBookCopy = (bookCopyId, borrowerId) => {
 }
 
 const returnBookCopy = (bookCopyId, borrowerId) => {
-    const index = toIndex(bookCopyId);
-    if (index < 0 || index >= data.bookCopies.length) {
-        throw new Error("Could not find book copy")
-    }
-    if (borrowerId < 0 || borrowerId >= data.bookCopies.length) {
-        throw new Error("Could not find user")
-    }
-    const bookCopy = data.bookCopies[index];
+    const bookCopy = findResourceByIdAndType(bookCopyId, "BookCopy")
     if (!bookCopy.borrowerId) {
         throw new Error("Book wasn't borrowed");
     }
