@@ -669,7 +669,6 @@ const deleteAuthor = (id) =>{
     deleteResource(id, "Author");
 }
 
-
 const deleteBookCopy = (id) => {
     deleteResource(id, "BookCopy")
 };
@@ -683,9 +682,7 @@ const deleteUser = (id) => {
     getBorrowedBookCopiesByUserId(id).forEach(bookCopy =>returnBookCopy(bookCopy.id, id));
     getOwnedBookCopiesByUserId(id).forEach(bookCopy => deleteBookCopy(bookCopy.id));
     deleteResource(id, "User");
-}
-
-
+};
 
 const db = {
     getAllBooks,
