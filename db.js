@@ -519,47 +519,69 @@ const data = {
 };
 
 
-const findResourceByIdAndType = (id, resourceType) => {
+function findResourceByIdAndType(id, resourceType) {
     const resources = findAllResourcesByType(resourceType);
     const resource = resources.find(resource => resource.id === id);
     if (!resource) {
-        throw new Error(`Couldnt find resource by id ${id}`)
+        throw new Error(`Could not find resource by id '${id}'`);
     }
     return resource;
 }
 
-const getAllResourcesByType = (resourceType) => [...findAllResourcesByType(resourceType)];
-
-const findAllResourcesByType = resourceType => {
-    const resources = data[resourceType]
+function findAllResourcesByType(resourceType) {
+    const resources = data[resourceType];
     if (!resources) {
-        throw new Error(`Unrecognized resource type ${resourceType}`)
+        throw new Error(`Unrecognized resource type '${resourceType}'`);
     }
     return resources;
 }
 
-const deleteResource = (id, resourceType) => {
-    const resources = findAllResourcesByType(resourceType);
-    const index = resources.findIndex(resource => resource.id = id);
-    if (index < 0) {
-        throw new Error(`Unrecognized resource type ${resourceType}`)
+const getResourceByIdAndType = (id, type) => {
+    try {
+        return {
+            ...findResourceByIdAndType(id, type)
+        };
+    } catch (error) {
+        return null;
     }
-    resources.splice(index, 1)
+};
+
+
+function getAllResourcesByType(resourceType) {
+    return [...findAllResourcesByType(resourceType)];
 }
 
 
-const getBooksByAuthorId = (authorId) => db.getAllBooks().filter(book => book.authorId === authorId);
 
+const getBooksByAuthorId = authorId =>
+    getAllBooks().filter(book => book.authorId === authorId);
 
+const getBookById = id => getResourceByIdAndType(id, "Book");
 const getAllBooks = () => getAllResourcesByType("Book");
+
+const getAuthorById = id => getResourceByIdAndType(id, "Author");
 const getAllAuthors = () => getAllResourcesByType("Author");
+
+const getUserById = id => getResourceByIdAndType(id, "User");
 const getAllUsers = () => getAllResourcesByType("User");
+
+const getBookCopyById = id => getResourceByIdAndType(id, "BookCopy");
 const getAllBookCopies = () => getAllResourcesByType("BookCopy");
 
-const getBookById = id => getResourceByIdAndType(id, "Book")
-const getAuthorById = id => getResourceByIdAndType(id, "Author")
-const getUserById = id => getResourceByIdAndType(id, "User")
-const getBookCopyById = id => getResourceByIdAndType(id, "BookCopy")
+
+const getBookCopiesByBookId = bookId => getAllBookCopies().filter(bookCopy => bookCopy.bookId === bookId);
+
+const getBorrowedBookCopiesByUserId = (userId) => getAllBookCopies().filter(bookCopy => bookCopy.borrowerId === userId);
+const getOwnedBookCopiesByUserId = (userId) => getAllBookCopies().filter(bookCopy => bookCopy.ownerId === userId);
+
+
+
+
+
+
+
+
+
 
 
 const getRandomIntBook = () => {
@@ -580,11 +602,6 @@ const getRandomIntAuthor = () => {
 const getRandomBook = () => data.books[getRandomIntBook()];
 const getRandomUser = () => data.users[getRandomIntUser()];
 const getRandomAuthor = () => data.authors[getRandomIntAuthor()];
-
-const getBookCopiesByBookId = bookId => getAllBookCopies().filter(bookCopy => bookCopy.bookId === bookId);
-
-const getBorrowedBookCopiesByUserId = (userId) => db.getAllBookCopies().filter(bookCopy => bookCopy.borrowerId === userId);
-const getOwnedBookCopiesByUserId = (userId) => db.getAllBookCopies().filter(bookCopy => bookCopy.ownerId === userId);
 
 const borrowBookCopy = (bookCopyId, borrowerId) => {
     const bookCopy = findResourceByIdAndType(bookCopyId, "BookCopy")
@@ -623,6 +640,16 @@ const getAvailableBookCopies = () => (
     data.bookCopies.filter(bookCopy => bookCopy.borrowerId === null)
 )
 
+const deleteResource = (id, resourceType) => {
+    const resources = findAllResourcesByType(resourceType);
+    const index = resources.findIndex(resource => resource.id = id);
+    if (index < 0) {
+        throw new Error(`Unrecognized resource type ${resourceType}`)
+    }
+    resources.splice(index, 1)
+};
+
+
 const pickRandom = (array) => {
     if (array.length) {
         const randomNumber = () => {
@@ -637,17 +664,28 @@ const pickRandom = (array) => {
     }
 };
 
-const getResourceByIdAndType = (type, id) => {
-    try {
-        return {...findResourceByIdAndType(id, type)}
-    } catch (e) {
-        return null;
-    }
-};
+const deleteAuthor = (id) =>{
+    getBooksByAuthorId(id).forEach(book => deleteBook(book.id))
+    deleteResource(id, "Author");
+}
+
 
 const deleteBookCopy = (id) => {
     deleteResource(id, "BookCopy")
+};
+
+const deleteBook = (id) => {
+    getBookCopiesByBookId(id).forEach(bookCopy => deleteBookCopy(bookCopy.id));
+    deleteResource(id, "Book");
+};
+
+const deleteUser = (id) => {
+    getBorrowedBookCopiesByUserId(id).forEach(bookCopy =>returnBookCopy(bookCopy.id, id));
+    getOwnedBookCopiesByUserId(id).forEach(bookCopy => deleteBookCopy(bookCopy.id));
+    deleteResource(id, "User");
 }
+
+
 
 const db = {
     getAllBooks,
@@ -661,7 +699,6 @@ const db = {
     getRandomUser,
     getRandomAuthor,
     getAllBookCopies,
-    deleteBookCopy,
     getBookCopyById,
     getBookCopiesByBookId,
     getBorrowedBookCopiesByUserId,
@@ -670,5 +707,9 @@ const db = {
     returnBookCopy,
     borrowRandom,
     getResourceByIdAndType,
+    deleteBookCopy,
+    deleteUser,
+    deleteAuthor,
+    deleteBook
 };
 module.exports = db;
