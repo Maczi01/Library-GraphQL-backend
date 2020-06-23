@@ -538,10 +538,17 @@ const findAllResourcesByType = resourceType => {
     return resources;
 }
 
+const deleteResource = (id, resourceType) => {
+    const resources = findAllResourcesByType(resourceType);
+    const index = resources.findIndex(resource => resource.id = id);
+    if (index < 0) {
+        throw new Error(`Unrecognized resource type ${resourceType}`)
+    }
+    resources.splice(index, 1)
+}
 
 
 const getBooksByAuthorId = (authorId) => db.getAllBooks().filter(book => book.authorId === authorId);
-
 
 
 const getAllBooks = () => getAllResourcesByType("Book");
@@ -551,7 +558,7 @@ const getAllBookCopies = () => getAllResourcesByType("BookCopy");
 
 const getBookById = id => getResourceByIdAndType(id, "Book")
 const getAuthorById = id => getResourceByIdAndType(id, "Author")
-const getUserById = id =>  getResourceByIdAndType(id, "User")
+const getUserById = id => getResourceByIdAndType(id, "User")
 const getBookCopyById = id => getResourceByIdAndType(id, "BookCopy")
 
 
@@ -638,6 +645,10 @@ const getResourceByIdAndType = (type, id) => {
     }
 };
 
+const deleteBookCopy = (id) => {
+    deleteResource(id, "BookCopy")
+}
+
 const db = {
     getAllBooks,
     getAllAuthors,
@@ -650,6 +661,7 @@ const db = {
     getRandomUser,
     getRandomAuthor,
     getAllBookCopies,
+    deleteBookCopy,
     getBookCopyById,
     getBookCopiesByBookId,
     getBorrowedBookCopiesByUserId,
