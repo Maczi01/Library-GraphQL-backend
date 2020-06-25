@@ -588,12 +588,14 @@ const getRandomIntBook = () => {
     const min = 1;
     const max = data.books.length;
     return Math.floor(Math.random() * (max - min)) + min;
-}
+};
+
 const getRandomIntUser = () => {
     const min = 1;
     const max = data.users.length;
     return Math.floor(Math.random() * (max - min)) + min;
-}
+};
+
 const getRandomIntAuthor = () => {
     const min = 1;
     const max = data.authors.length;
@@ -608,11 +610,11 @@ const borrowBookCopy = (bookCopyId, borrowerId) => {
     if (!!bookCopy.borrowerId) {
         throw new Error("Book already borrowed");
     }
-    // if (bookCopy.ownerId === borrowerId) {
-    //     throw new Error("Its your book! You cant borrow it!")
-    // }
+    if (bookCopy.ownerId === borrowerId) {
+        throw new Error("Its your book! You cant borrow it!")
+    }
     bookCopy.borrowerId = borrowerId;
-}
+};
 
 const returnBookCopy = (bookCopyId, borrowerId) => {
     const bookCopy = findResourceByIdAndType(bookCopyId, "BookCopy")
@@ -638,7 +640,7 @@ const borrowRandom = (borrowerId) => {
 
 const getAvailableBookCopies = () => (
     data.bookCopies.filter(bookCopy => bookCopy.borrowerId === null)
-)
+);
 
 const deleteResource = (id, resourceType) => {
     const resources = findAllResourcesByType(resourceType);
@@ -667,7 +669,7 @@ const pickRandom = (array) => {
 const deleteAuthor = (id) =>{
     getBooksByAuthorId(id).forEach(book => deleteBook(book.id))
     deleteResource(id, "Author");
-}
+};
 
 const deleteBookCopy = (id) => {
     deleteResource(id, "BookCopy")
@@ -683,6 +685,22 @@ const deleteUser = (id) => {
     getOwnedBookCopiesByUserId(id).forEach(bookCopy => deleteBookCopy(bookCopy.id));
     deleteResource(id, "User");
 };
+
+const updateResource = (id, resourceType, resourceData) => {
+    const resources = findAllResourcesByType(resourceType);
+    const index = resources.findIndex(resource => resource.id = id);
+    if (index < 0) {
+        throw new Error(`Unrecognized resource type ${resourceType}`)
+    }
+    const existingResource = resources[index];
+    resources[index] = {
+        id,
+        resourceType,
+        ...existingResource,
+        ...resourceData,
+    }
+};
+
 
 const db = {
     getAllBooks,
@@ -709,4 +727,5 @@ const db = {
     deleteAuthor,
     deleteBook
 };
+
 module.exports = db;
