@@ -695,6 +695,27 @@ const updateBookCopy = (id, bookCopyData) => {
     updateResource(id, "BookCopy", {ownerId, bookId, borrowerId})
 };
 
+const updateUser = (id, userData) =>{
+    const {name, email, info, avatar} = userData;
+    updateResource(id, "User", {ownerId, bookId, borrowerId})
+};
+
+const updateBook = (id, bookData) =>{
+    const {authorId, title, description} = userData;
+    if (!getAuthorById(authorId)){
+        throw new Error(`Author needs valid  id ! ${authorId} `)
+    }
+    updateResource(id, "User", {authorId, title, description})
+};
+
+const updateAuthor = (id, authorData) =>{
+    const {name, photoPath, bio} = authorData;
+    if (!getAuthorById(authorId)){
+        throw new Error(`Author needs valid  id ! ${authorId} `)
+    }
+    updateResource(id, "Author", {name, photoPath, bio})
+};
+
 const updateResource = (id, resourceType, resourceData) => {
     const resources = findAllResourcesByType(resourceType);
     const index = resources.findIndex(resource => resource.id = id);
@@ -727,6 +748,9 @@ const db = {
     getBorrowedBookCopiesByUserId,
     getOwnedBookCopiesByUserId,
     updateBookCopy,
+    updateUser,
+    updateBook,
+    updateAuthor,
     borrowBookCopy,
     returnBookCopy,
     borrowRandom,
