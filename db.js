@@ -552,7 +552,6 @@ function getAllResourcesByType(resourceType) {
 }
 
 
-
 const getBooksByAuthorId = authorId =>
     getAllBooks().filter(book => book.authorId === authorId);
 
@@ -573,15 +572,6 @@ const getBookCopiesByBookId = bookId => getAllBookCopies().filter(bookCopy => bo
 
 const getBorrowedBookCopiesByUserId = (userId) => getAllBookCopies().filter(bookCopy => bookCopy.borrowerId === userId);
 const getOwnedBookCopiesByUserId = (userId) => getAllBookCopies().filter(bookCopy => bookCopy.ownerId === userId);
-
-
-
-
-
-
-
-
-
 
 
 const getRandomIntBook = () => {
@@ -613,7 +603,10 @@ const borrowBookCopy = (bookCopyId, borrowerId) => {
     if (bookCopy.ownerId === borrowerId) {
         throw new Error("Its your book! You cant borrow it!")
     }
-    bookCopy.borrowerId = borrowerId;
+    updateBookCopy(bookCopyId, {
+        ...bookCopy,
+        borrowerId
+    })
 };
 
 const returnBookCopy = (bookCopyId, borrowerId) => {
@@ -624,8 +617,10 @@ const returnBookCopy = (bookCopyId, borrowerId) => {
     if (bookCopy.borrowerId !== borrowerId) {
         throw new Error("You dont borrow this book")
     }
-    bookCopy.borrowerId = null;
-};
+    updateBookCopy(bookCopyId, {
+        ...bookCopy,
+        borrowerId: null
+    })};
 
 const borrowRandom = (borrowerId) => {
     const AvailableBookCopies = getAvailableBookCopies();
@@ -666,7 +661,7 @@ const pickRandom = (array) => {
     }
 };
 
-const deleteAuthor = (id) =>{
+const deleteAuthor = (id) => {
     getBooksByAuthorId(id).forEach(book => deleteBook(book.id))
     deleteResource(id, "Author");
 };
@@ -681,9 +676,23 @@ const deleteBook = (id) => {
 };
 
 const deleteUser = (id) => {
-    getBorrowedBookCopiesByUserId(id).forEach(bookCopy =>returnBookCopy(bookCopy.id, id));
+    getBorrowedBookCopiesByUserId(id).forEach(bookCopy => returnBookCopy(bookCopy.id, id));
     getOwnedBookCopiesByUserId(id).forEach(bookCopy => deleteBookCopy(bookCopy.id));
     deleteResource(id, "User");
+};
+
+const updateBookCopy = (id, bookCopyData) => {
+    const {ownerId, bookId, borrowerId} = bookCopyData;
+    if (!getUserById(ownerId)){
+        throw new Error(`BookCopy needs valid owner id ! ${ownerId} `)
+    }
+    if (!getBookById(bookId)){
+        throw new Error(`BookCopy needs valid owner id ! ${bookId} `)
+    }
+    if (borrowerId && !getUserById(borrowerId)){
+        throw new Error(`BookCopy needs validempty or borrower id ! ${ownerId} `)
+    }
+    updateResource(id, "BookCopy", {ownerId, bookId, borrowerId})
 };
 
 const updateResource = (id, resourceType, resourceData) => {
@@ -701,7 +710,6 @@ const updateResource = (id, resourceType, resourceData) => {
     }
 };
 
-
 const db = {
     getAllBooks,
     getAllAuthors,
@@ -718,6 +726,7 @@ const db = {
     getBookCopiesByBookId,
     getBorrowedBookCopiesByUserId,
     getOwnedBookCopiesByUserId,
+    updateBookCopy,
     borrowBookCopy,
     returnBookCopy,
     borrowRandom,
