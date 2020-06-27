@@ -754,7 +754,7 @@ const createResource = (resourceType, resourceData) => {
     };
 
     resources.push(createdResource);
-    return createResource
+    return createdResource
 };
 
 function initializeNextID(resourceType) {
@@ -833,7 +833,7 @@ const createUser = (userData) => {
     }
     const color = VALID_AVATAR_COLORS[Math.floor(Math.random() * VALID_AVATAR_COLORS.length)]
     const avatarName = `${Math.random() > 0 ? "m" : "w"}${Math.ceil(Math.random * 25)}`
-    return createResource('User', {
+    return createResource("User", {
         name,
         email,
         info,

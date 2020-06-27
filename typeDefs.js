@@ -24,6 +24,9 @@ const typeDefs = gql`
         borrowBookCopy(id: ID!): BookCopy!
         returnBookCopy(id: ID!): BookCopy!
         borrowRandomBook: BookCopy
+        createUser(name: String!, email: String!, info: String!): User
+        updateUser(id: ID!, name: String!,  info: String!): User
+        deleteUser(id: ID!): ID
     }
     union Anything= User | Author | Book | BookCopy
     interface Resource {

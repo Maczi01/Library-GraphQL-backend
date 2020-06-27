@@ -66,7 +66,10 @@ const resolvers = {
             },
             borrowRandomBook: (rootValue, {id}, {db, currentUserDbId}) => {
                 return db.borrowRandom(currentUserDbId)
-            }
+            },
+            createUser: (rootValue, { name, info, email }, { db }) => {
+                return db.createUser({ name, info, email });
+            },
         },
         Book: {
             id,
