@@ -708,7 +708,7 @@ const updateUser = (id, userData) => {
 };
 
 const updateBook = (id, bookData) => {
-    const {authorId, title, description} = userData;
+    const {authorId, title, description} = bookData;
     if (!getAuthorById(authorId)) {
         throw new Error(`Author needs valid  id ! ${authorId} `)
     }
@@ -781,13 +781,31 @@ const createBookCopy = (bookCopyData) => {
     return createResource('BookCopy', {ownerId, bookId, borrowerId});
 }
 
-const createBook = (bookData) => {
 
+const PHOTO_PATHS = [
+    "/images/book-authors/j-k-rowling.jpg",
+    "/images/book-authors/james-s-a-corey.jpg",
+    "/images/book-authors/andrzej-sapkowski.jpg"
+]
+
+const createAuthor = (authorData) => {
+    const {name, bio} = authorData;
+    if (!name || name.length < 1) {
+        throw new Error("Author must have a title!")
+    }
+    if (!bio || bio.length < 1) {
+        throw new Error("Author must have a bio!")
+    }
+    const photoPath = PHOTO_PATHS[Math.floor(Math.random() * PHOTO_PATHS.length)]
+    createResource("Author", {name, photoPath, bio, photoPath})
+}
+
+const createBook = (bookData) => {
     const {authorId, title, description} = bookData;
-    if(!title || title.length <1){
+    if (!title || title.length < 1) {
         throw new Error("Book must have a title!")
     }
-    if(!description || description.length <1){
+    if (!description || description.length < 1) {
         throw new Error("Book must have a description!")
     }
     if (!getAuthorById(authorId)) {
@@ -855,7 +873,7 @@ const db = {
     createUser,
     createBookCopy,
     createBook,
-
+    createAuthor,
     deleteBookCopy,
     deleteUser,
     deleteAuthor,
