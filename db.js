@@ -524,6 +524,7 @@ function initDb() {
     initializeNextID("BookCopy")
     initializeNextID("User")
 }
+
 function findResourceByIdAndType(id, resourceType) {
     const resources = findAllResourcesByType(resourceType);
     const resource = resources.find(resource => resource.id === id);
@@ -750,7 +751,7 @@ const createResource = (resourceType, resourceData) => {
     return createResource
 };
 
-function initializeNextID(resourceType){
+function initializeNextID(resourceType) {
     const resources = findAllResourcesByType(resourceType)
     if (!resources.nextId) {
         resources.nextId = resources.nextId + 1
@@ -766,12 +767,37 @@ initDb();
 
 const VALID_AVATAR_COLORS = ["red", "green", "yellow", "blue"]
 
+const createBookCopy = (bookCopyData) => {
+    const {ownerId, bookId, borrowerId} = bookCopyData;
+    if (!getUserById(ownerId)) {
+        throw new Error(`BookCopy needs valid owner id ! ${ownerId} `)
+    }
+    if (!getBookById(bookId)) {
+        throw new Error(`BookCopy needs valid owner id ! ${bookId} `)
+    }
+    if (borrowerId && !getUserById(borrowerId)) {
+        throw new Error(`BookCopy needs validempty or borrower id ! ${ownerId} `)
+    }
+    return createResource('BookCopy', {ownerId, bookId, borrowerId});
+}
+
+const createBook = (bookData) => {
+
+    const {authorId, title, description} = bookData;
+    if(!title || title.length <1){
+        throw new Error("Book must have a title!")
+    }
+    if(!description || description.length <1){
+        throw new Error("Book must have a description!")
+    }
+    if (!getAuthorById(authorId)) {
+        throw new Error(`Author needs valid  id ! ${authorId} `)
+    }
+    return createResource('Book', {authorId, title, description});
+}
+
 const createUser = (userData) => {
-    const {
-        name,
-        email,
-        info,
-    } = userData
+    const {name, email, info,} = userData
     if (!name || name.length < 1) {
         throw new Error("User needs valid name!")
     }
@@ -793,7 +819,7 @@ const createUser = (userData) => {
         }
     });
 }
-const user  = createUser(
+const user = createUser(
     ({
         name: "Eric",
         email: "eric@example.com",
@@ -826,8 +852,9 @@ const db = {
     returnBookCopy,
     borrowRandom,
     getResourceByIdAndType,
-    // createUser,
-
+    createUser,
+    createBookCopy,
+    createBook,
 
     deleteBookCopy,
     deleteUser,
