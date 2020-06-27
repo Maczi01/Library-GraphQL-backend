@@ -731,6 +731,23 @@ const updateResource = (id, resourceType, resourceData) => {
     }
 };
 
+const createResource = (resourceType, resourceData) => {
+    const resources = findAllResourcesByType(resourceType);
+    const id = resources.length + 1;
+    const cretedResource = {
+        ...resourceData,
+        resourceType,
+        id,
+    };
+
+    resources.push(createResource());
+    return createResource
+};
+
+const createUser = (userData) =>{
+    return createResource('User', {name, email, info});
+}
+
 const db = {
     getAllBooks,
     getAllAuthors,
