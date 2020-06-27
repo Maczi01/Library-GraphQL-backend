@@ -793,7 +793,15 @@ const createUser = (userData) => {
         }
     });
 }
+const user  = createUser(
+    ({
+        name: "Eric",
+        email: "eric@example.com",
+        info: "Pijak"
+    })
+)
 
+console.log(user)
 const db = {
     getAllBooks,
     getAllAuthors,
@@ -818,7 +826,7 @@ const db = {
     returnBookCopy,
     borrowRandom,
     getResourceByIdAndType,
-    createUser,
+    // createUser,
 
 
     deleteBookCopy,
