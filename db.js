@@ -518,7 +518,12 @@ const data = {
     ],
 };
 
-
+function initDb() {
+    initializeNextID("Book")
+    initializeNextID("Author")
+    initializeNextID("BookCopy")
+    initializeNextID("User")
+}
 function findResourceByIdAndType(id, resourceType) {
     const resources = findAllResourcesByType(resourceType);
     const resource = resources.find(resource => resource.id === id);
@@ -733,28 +738,51 @@ const updateResource = (id, resourceType, resourceData) => {
 };
 
 const createResource = (resourceType, resourceData) => {
+    const id = generateNextID(resourceType)
     const resources = findAllResourcesByType(resourceType);
-    const id = resources.length + 1;
-    const cretedResource = {
+    const createdResource = {
         ...resourceData,
         resourceType,
         id,
     };
 
-    resources.push(createResource());
+    resources.push(createdResource);
     return createResource
 };
+
+function initializeNextID(resourceType){
+    const resources = findAllResourcesByType(resourceType)
+    if (!resources.nextId) {
+        resources.nextId = resources.nextId + 1
+    }
+}
+
+function generateNextID(resourceType) {
+    const resources = findAllResourcesByType(resourceType);
+    return `${resources.nextId++}`
+}
+
+initDb();
 
 const VALID_AVATAR_COLORS = ["red", "green", "yellow", "blue"]
 
 const createUser = (userData) => {
-    const color = VALID_AVATAR_COLORS[Math.floor(Math.random() * VALID_AVATAR_COLORS.length)]
     const {
         name,
         email,
         info,
     } = userData
-    const avatarName = `${Math.random() >0 ? "m" : "w"}${Math.ceil(Math.random * 25)}`
+    if (!name || name.length < 1) {
+        throw new Error("User needs valid name!")
+    }
+    if (!email || !email.match(/@/)) {
+        throw new Error("User needs valid name!")
+    }
+    if (!info || info.length < 1) {
+        throw new Error("User needs valid info!")
+    }
+    const color = VALID_AVATAR_COLORS[Math.floor(Math.random() * VALID_AVATAR_COLORS.length)]
+    const avatarName = `${Math.random() > 0 ? "m" : "w"}${Math.ceil(Math.random * 25)}`
     return createResource('User', {
         name,
         email,
@@ -790,6 +818,9 @@ const db = {
     returnBookCopy,
     borrowRandom,
     getResourceByIdAndType,
+    createUser,
+
+
     deleteBookCopy,
     deleteUser,
     deleteAuthor,
