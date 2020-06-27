@@ -620,7 +620,8 @@ const returnBookCopy = (bookCopyId, borrowerId) => {
     updateBookCopy(bookCopyId, {
         ...bookCopy,
         borrowerId: null
-    })};
+    })
+};
 
 const borrowRandom = (borrowerId) => {
     const AvailableBookCopies = getAvailableBookCopies();
@@ -683,34 +684,34 @@ const deleteUser = (id) => {
 
 const updateBookCopy = (id, bookCopyData) => {
     const {ownerId, bookId, borrowerId} = bookCopyData;
-    if (!getUserById(ownerId)){
+    if (!getUserById(ownerId)) {
         throw new Error(`BookCopy needs valid owner id ! ${ownerId} `)
     }
-    if (!getBookById(bookId)){
+    if (!getBookById(bookId)) {
         throw new Error(`BookCopy needs valid owner id ! ${bookId} `)
     }
-    if (borrowerId && !getUserById(borrowerId)){
+    if (borrowerId && !getUserById(borrowerId)) {
         throw new Error(`BookCopy needs validempty or borrower id ! ${ownerId} `)
     }
     updateResource(id, "BookCopy", {ownerId, bookId, borrowerId})
 };
 
-const updateUser = (id, userData) =>{
+const updateUser = (id, userData) => {
     const {name, email, info, avatar} = userData;
     updateResource(id, "User", {ownerId, bookId, borrowerId})
 };
 
-const updateBook = (id, bookData) =>{
+const updateBook = (id, bookData) => {
     const {authorId, title, description} = userData;
-    if (!getAuthorById(authorId)){
+    if (!getAuthorById(authorId)) {
         throw new Error(`Author needs valid  id ! ${authorId} `)
     }
     updateResource(id, "User", {authorId, title, description})
 };
 
-const updateAuthor = (id, authorData) =>{
+const updateAuthor = (id, authorData) => {
     const {name, photoPath, bio} = authorData;
-    if (!getAuthorById(authorId)){
+    if (!getAuthorById(authorId)) {
         throw new Error(`Author needs valid  id ! ${authorId} `)
     }
     updateResource(id, "Author", {name, photoPath, bio})
@@ -744,8 +745,25 @@ const createResource = (resourceType, resourceData) => {
     return createResource
 };
 
-const createUser = (userData) =>{
-    return createResource('User', {name, email, info});
+const VALID_AVATAR_COLORS = ["red", "green", "yellow", "blue"]
+
+const createUser = (userData) => {
+    const color = VALID_AVATAR_COLORS[Math.floor(Math.random() * VALID_AVATAR_COLORS.length)]
+    const {
+        name,
+        email,
+        info,
+    } = userData
+    const avatarName = `${Math.random() >0 ? "m" : "w"}${Math.ceil(Math.random * 25)}`
+    return createResource('User', {
+        name,
+        email,
+        info,
+        avatar: {
+            imagePath: `/images/avatars/${avatarName}.png`,
+            color
+        }
+    });
 }
 
 const db = {
