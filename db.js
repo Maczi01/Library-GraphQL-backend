@@ -703,8 +703,14 @@ const updateBookCopy = (id, bookCopyData) => {
 };
 
 const updateUser = (id, userData) => {
-    const {name, email, info, avatar} = userData;
-    updateResource(id, "User", {ownerId, bookId, borrowerId})
+    const {name, info} = userData;
+    if (!name || name.length < 1) {
+        throw new Error("User must have a name!")
+    }
+    if (!info || info.length < 1) {
+        throw new Error("User must have a info!")
+    }
+    updateResource(id, "User", {name, info} )
 };
 
 const updateBook = (id, bookData) => {
@@ -837,10 +843,7 @@ const createUser = (userData) => {
         }
     });
 }
-createAuthor({
-    name: "Wiesiek",
-    bio:"mulat"
-})
+
 const db = {
     getAllBooks,
     getAllAuthors,
