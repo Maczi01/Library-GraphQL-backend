@@ -797,7 +797,7 @@ const createAuthor = (authorData) => {
         throw new Error("Author must have a bio!")
     }
     const photoPath = PHOTO_PATHS[Math.floor(Math.random() * PHOTO_PATHS.length)]
-    createResource("Author", {name, photoPath, bio, photoPath})
+    return createResource("Author", {name, photoPath, bio, photoPath})
 }
 
 const createBook = (bookData) => {
@@ -837,15 +837,10 @@ const createUser = (userData) => {
         }
     });
 }
-const user = createUser(
-    ({
-        name: "Eric",
-        email: "eric@example.com",
-        info: "Pijak"
-    })
-)
-
-console.log(user)
+createAuthor({
+    name: "Wiesiek",
+    bio:"mulat"
+})
 const db = {
     getAllBooks,
     getAllAuthors,
