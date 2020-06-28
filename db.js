@@ -1,41 +1,40 @@
-
 var knex = require('knex')({
     client: 'mysql',
     connection: {
-        host : '127.0.0.1',
-        user : 'root',
-        password : '',
-        database : 'library'
+        host: '127.0.0.1',
+        user: 'root',
+        password: '',
+        database: 'lib'
     }
 });
 
 
-function findResourceByIdAndType(id, resourceType) {
-    const resources = findAllResourcesByType(resourceType);
-    const resource = resources.find(resource => resource.id === id);
-    if (!resource) {
-        throw new Error(`Could not find resource by id '${id}'`);
-    }
-    return resource;
-}
+// function findResourceByIdAndType(id, resourceType) {
+//     const resources = findAllResourcesByType(resourceType);
+//     const resource = resources.find(resource => resource.id === id);
+//     if (!resource) {
+//         throw new Error(`Could not find resource by id '${id}'`);
+//     }
+//     return resource;
+// }
 
-function findAllResourcesByType(resourceType) {
-    const resources = data[resourceType];
-    if (!resources) {
-        throw new Error(`Unrecognized resource type '${resourceType}'`);
-    }
-    return resources;
-}
-
-const getResourceByIdAndType = (id, type) => {
-    try {
-        return {
-            ...findResourceByIdAndType(id, type)
-        };
-    } catch (error) {
-        return null;
-    }
-};
+// function findAllResourcesByType(resourceType) {
+//     const resources = data[resourceType];
+//     if (!resources) {
+//         throw new Error(`Unrecognized resource type '${resourceType}'`);
+//     }
+//     return resources;
+// }
+//
+// const getResourceByIdAndType = (id, type) => {
+//     try {
+//         return {
+//             ...findResourceByIdAndType(id, type)
+//         };
+//     } catch (error) {
+//         return null;
+//     }
+// };
 
 
 function getAllResourcesByType(resourceType) {
@@ -52,7 +51,8 @@ const getAllBooks = () => getAllResourcesByType("Book");
 const getAuthorById = id => getResourceByIdAndType(id, "Author");
 
 
-const getAllAuthors = () =>     ;
+ const getAllAuthors = async () =>  await knex.select('name', 'bio', 'resourceType').from('author')
+;
 
 const getUserById = id => getResourceByIdAndType(id, "User");
 const getAllUsers = () => getAllResourcesByType("User");
@@ -197,7 +197,7 @@ const updateUser = (id, userData) => {
     if (!info || info.length < 1) {
         throw new Error("User must have a info!")
     }
-    updateResource(id, "User", {name, info} )
+    updateResource(id, "User", {name, info})
 };
 
 const updateBook = (id, bookData) => {
@@ -331,37 +331,37 @@ const createUser = (userData) => {
 }
 
 const db = {
-    getAllBooks,
+    // getAllBooks,
     getAllAuthors,
-    getAllUsers,
-    getBooksByAuthorId,
-    getBookById,
-    getAuthorById,
-    getUserById,
-    getRandomBook,
-    getRandomUser,
-    getRandomAuthor,
-    getAllBookCopies,
-    getBookCopyById,
-    getBookCopiesByBookId,
-    getBorrowedBookCopiesByUserId,
-    getOwnedBookCopiesByUserId,
-    updateBookCopy,
-    updateUser,
-    updateBook,
-    updateAuthor,
-    borrowBookCopy,
-    returnBookCopy,
-    borrowRandom,
-    getResourceByIdAndType,
-    createUser,
-    createBookCopy,
-    createBook,
-    createAuthor,
-    deleteBookCopy,
-    deleteUser,
-    deleteAuthor,
-    deleteBook
+    // getAllUsers,
+    // getBooksByAuthorId,
+    // getBookById,
+    // getAuthorById,
+    // getUserById,
+    // getRandomBook,
+    // getRandomUser,
+    // getRandomAuthor,
+    // getAllBookCopies,
+    // getBookCopyById,
+    // getBookCopiesByBookId,
+    // getBorrowedBookCopiesByUserId,
+    // getOwnedBookCopiesByUserId,
+    // updateBookCopy,
+    // updateUser,
+    // updateBook,
+    // updateAuthor,
+    // borrowBookCopy,
+    // returnBookCopy,
+    // borrowRandom,
+    // getResourceByIdAndType,
+    // createUser,
+    // createBookCopy,
+    // createBook,
+    // createAuthor,
+    // deleteBookCopy,
+    // deleteUser,
+    // deleteAuthor,
+    // deleteBook
 };
 
 module.exports = db;

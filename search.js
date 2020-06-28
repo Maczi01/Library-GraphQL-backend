@@ -23,16 +23,16 @@ function initAuthors(db) {
     })
 }
 
-function initUser(db) {
-    return lunr(function () {
-        this.ref('id')
-        this.field('name')
-        this.field('info')
-        db.getAllUsers().forEach((user) => {
-            this.add(user)
-        }, this)
-    })
-}
+// function initUser(db) {
+//     return lunr(function () {
+//         this.ref('id')
+//         this.field('name')
+//         this.field('info')
+//         db.getAllUsers().forEach((user) => {
+//             this.add(user)
+//         }, this)
+//     })
+// }
 
 
 class Search {
