@@ -1,10 +1,14 @@
 
-function initDb() {
-    initializeNextID("Book")
-    initializeNextID("Author")
-    initializeNextID("BookCopy")
-    initializeNextID("User")
-}
+var knex = require('knex')({
+    client: 'mysql',
+    connection: {
+        host : '127.0.0.1',
+        user : 'root',
+        password : '',
+        database : 'library'
+    }
+});
+
 
 function findResourceByIdAndType(id, resourceType) {
     const resources = findAllResourcesByType(resourceType);
@@ -46,7 +50,9 @@ const getBookById = id => getResourceByIdAndType(id, "Book");
 const getAllBooks = () => getAllResourcesByType("Book");
 
 const getAuthorById = id => getResourceByIdAndType(id, "Author");
-const getAllAuthors = () => getAllResourcesByType("Author");
+
+
+const getAllAuthors = () =>     ;
 
 const getUserById = id => getResourceByIdAndType(id, "User");
 const getAllUsers = () => getAllResourcesByType("User");
@@ -250,7 +256,6 @@ function generateNextID(resourceType) {
     return `${resources.nextId++}`
 }
 
-initDb();
 
 const VALID_AVATAR_COLORS = ["red", "green", "yellow", "blue"]
 
