@@ -688,8 +688,7 @@ const deleteUser = (id) => {
     deleteResource(id, "User");
 };
 
-const
-    updateBookCopy = (id, bookCopyData) => {
+const updateBookCopy = (id, bookCopyData) => {
     const {ownerId, bookId, borrowerId} = bookCopyData;
     if (!getUserById(ownerId)) {
         throw new Error(`BookCopy needs valid owner id ! ${ownerId} `)
@@ -783,7 +782,7 @@ const createBookCopy = (bookCopyData) => {
         throw new Error(`BookCopy needs valid owner id ! ${bookId} `)
     }
     if (borrowerId && !getUserById(borrowerId)) {
-        throw new Error(`BookCopy needs validempty or borrower id ! ${ownerId} `)
+        throw new Error(`BookCopy needs valid or borrower id ! ${ownerId} `)
     }
     return createResource('BookCopy', {ownerId, bookId, borrowerId});
 }
