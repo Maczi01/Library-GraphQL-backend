@@ -83,10 +83,21 @@ const resolvers = {
             },
             updateAuthor: (rootValue, {id, name, bio}, {db}) => {
                 db.updateAuthor(toDbId(id), {name, bio})
-                return db.getUserById(toDbId(id))
+                return db.getAuthorById(toDbId(id))
             },
             deleteAuthor: (rootValue, {id}, {db}) => {
                 db.deleteAuthor(toDbId(id))
+                return id;
+            },
+            createBook: (rootValue, {title, description}, {db}) => {
+                return db.createBook({title, description});
+            },
+            updateBook: (rootValue, {id, title, description}, {db}) => {
+                db.updateBook(toDbId(id), {name, bio})
+                return db.getBookById(toDbId(id))
+            },
+            deleteBook: (rootValue, {id}, {db}) => {
+                db.deleteBook(toDbId(id))
                 return id;
             }
         },
