@@ -30,14 +30,16 @@ const typeDefs = gql`
         deleteUser(id: ID!): ID
 
         createAuthor(name: String!, bio: String!): Author
-        updateAuthor(id: ID!, name: String!,  bio: String!): User
+        updateAuthor(id: ID!, name: String!,  bio: String!): Author
         deleteAuthor(id: ID!): ID
 
-        createBook(title: String!, description: String!): Author
-        updateBook(id: ID!, titile: String!,  description: String!): User
+        createBook(title: String!, description: String!): Book
+        updateBook(id: ID!, titile: String!,  description: String!): Book
         deleteBook(id: ID!): ID
 
-        
+        createBookCopy(ownerId: String!, bookId: String!, borrowerId: String ): BookCopy
+        updateBookCopy(id: ID!, ownerId: String!, bookId: String!, borrowerId: String ): BookCopy
+        deleteBookCopy(id: ID!): ID
     }
     union Anything= User | Author | Book | BookCopy
     interface Resource {

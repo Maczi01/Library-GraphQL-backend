@@ -688,7 +688,8 @@ const deleteUser = (id) => {
     deleteResource(id, "User");
 };
 
-const updateBookCopy = (id, bookCopyData) => {
+const
+    updateBookCopy = (id, bookCopyData) => {
     const {ownerId, bookId, borrowerId} = bookCopyData;
     if (!getUserById(ownerId)) {
         throw new Error(`BookCopy needs valid owner id ! ${ownerId} `)

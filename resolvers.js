@@ -99,6 +99,17 @@ const resolvers = {
             deleteBook: (rootValue, {id}, {db}) => {
                 db.deleteBook(toDbId(id))
                 return id;
+            },
+            createBookCopy: (rootValue, {ownerId, bookId, borrowerId}, {db}) => {
+                return db.createBookCopy({ownerId: toDbId(ownerId), bookId: toDbId(bookId), borrowerId:toDbId(borrowerId)});
+            },
+            updateBookCopy: (rootValue, {id, ownerId, bookId, borrowerId}, {db}) => {
+                db.updateBook(toDbId(id), {ownerId: toDbId(ownerId), bookId, borrowerId:toDbId(borrowerId)})
+                return db.getBookCopyById(toDbId(id))
+            },
+            deleteBookCopy: (rootValue, {id}, {db}) => {
+                db.deleteBookCopy(toDbId(id))
+                return id;
             }
         },
         Book: {
