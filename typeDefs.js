@@ -37,8 +37,8 @@ const typeDefs = gql`
         updateBook(id: ID!, titile: String!,  description: String!): Book
         deleteBook(id: ID!): ID
 
-        createBookCopy(ownerId: ID!, bookId: ID!, borrowerId: ID ): BookCopy
-        updateBookCopy(id: ID!, ownerId: String!, bookId: String!, borrowerId: String ): BookCopy
+        createBookCopy(ownerId: ID!, bookId: ID!, borrowerId: ID): BookCopy
+        updateBookCopy(id: ID!, ownerId: ID!, bookId: ID!, borrowerId: ID): BookCopy
         deleteBookCopy(id: ID!): ID
     }
     union Anything= User | Author | Book | BookCopy
