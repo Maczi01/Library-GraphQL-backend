@@ -1,4 +1,4 @@
-const data = {
+const initialData = () => ({
     Book: [
         {
             id: "1",
@@ -516,9 +516,12 @@ const data = {
             bookId: "20"
         }
     ],
-};
+});
+
+let data = {};
 
 function initDb() {
+    data = initialData()
     initializeNextID("Book")
     initializeNextID("Author")
     initializeNextID("BookCopy")
@@ -844,6 +847,10 @@ const createUser = (userData) => {
     });
 }
 
+function revertInitialData() {
+    initDb();
+}
+
 const db = {
     getAllBooks,
     getAllAuthors,
@@ -875,7 +882,8 @@ const db = {
     deleteBookCopy,
     deleteUser,
     deleteAuthor,
-    deleteBook
+    deleteBook,
+    revertInitialData
 };
 
 module.exports = db;

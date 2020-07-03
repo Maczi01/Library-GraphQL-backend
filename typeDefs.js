@@ -40,6 +40,8 @@ const typeDefs = gql`
         createBookCopy(ownerId: ID!, bookId: ID!, borrowerId: ID): BookCopy
         updateBookCopy(id: ID!, ownerId: ID!, bookId: ID!, borrowerId: ID): BookCopy
         deleteBookCopy(id: ID!): ID
+        
+        resetData: Boolean
     }
     union Anything= User | Author | Book | BookCopy
     interface Resource {
