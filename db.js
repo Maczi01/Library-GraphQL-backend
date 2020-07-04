@@ -12,19 +12,19 @@ const getAllAuthors = async () => await knex.select('name', 'bio', 'resourceType
 const getAllBooks = async () => await knex.select('title', 'description', 'resourceType').from('book');
 const getAllUsers = async () => await knex.select('name', 'info', 'resourceType').from('user');
 
+const getAuthorById = async (authorId) => await knex.select('name', 'bio', 'resourceType').from('author').where('id', authorId);
+
 
 function getAllResourcesByType(resourceType) {
     return [...findAllResourcesByType(resourceType)];
 }
 
 
-const getBooksByAuthorId = authorId =>
-    getAllBooks().filter(book => book.authorId === authorId);
-
 const getBookById = id => getResourceByIdAndType(id, "Book");
 
-const getAuthorById = id => getResourceByIdAndType(id, "Author");
+// const getAuthorById = id => getResourceByIdAndType(id, "Author");
 
+// const getBooksByAuthorId = getAllBooks().filter(book => book.authorId === authorId);
 
 const getUserById = id => getResourceByIdAndType(id, "User");
 
@@ -145,6 +145,7 @@ const deleteUser = (id) => {
     getOwnedBookCopiesByUserId(id).forEach(bookCopy => deleteBookCopy(bookCopy.id));
     deleteResource(id, "User");
 };
+
 
 const updateBookCopy = (id, bookCopyData) => {
     const {ownerId, bookId, borrowerId} = bookCopyData;
@@ -305,9 +306,9 @@ const db = {
     getAllAuthors,
     getAllBooks,
     getAllUsers,
+    getAuthorById,
     // getBooksByAuthorId,
     // getBookById,
-    // getAuthorById,
     // getUserById,
     // getRandomBook,
     // getRandomUser,
