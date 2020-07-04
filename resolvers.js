@@ -112,15 +112,49 @@ const resolvers = {
                 }
             },
             createAuthor: (rootValue, {name, bio}, {db}) => {
-                return db.createAuthor({name, bio});
+                try {
+                    return {
+                        user: db.createAuthor({name, info, email}),
+                        message: "Author was created",
+                        success: true
+                    }
+                } catch (e) {
+                    return {
+                        success: false,
+                        message: e.message
+                    }
+                }
             },
             updateAuthor: (rootValue, {id, name, bio}, {db}) => {
-                db.updateAuthor(toDbId(id), {name, bio})
-                return db.getAuthorById(toDbId(id))
+                try {
+                    db.updateUser(toDbId(id), {name, info})
+                    return {
+                        user: db.getAuthorById(toDbId(id)),
+                        message: "Author was updated  ",
+                        success: true
+                    }
+                } catch (e) {
+                    return {
+                        success: false,
+                        message: e.message
+                    }
+                }
             },
             deleteAuthor: (rootValue, {id}, {db}) => {
-                db.deleteAuthor(toDbId(id))
-                return id;
+
+                try {
+                    db.deleteAuthor(toDbId(id), {name, info})
+                    return {
+                        id,
+                        message: "Author was deleted",
+                        success: true
+                    }
+                } catch (e) {
+                    return {
+                        success: false,
+                        message: e.message
+                    }
+                }
             },
             createBook: (rootValue, {title, description}, {db}) => {
                 return db.createBook({title, description});
@@ -217,10 +251,12 @@ const resolvers = {
         },
         Resource: {
             __resolveType: resource => resource.resourceType
-        },
+        }
+        ,
         Person: {
             __resolveType: resource => resource.resourceType
-        },
+        }
+        ,
         MutationResult: {
             __resolveType: null
         }

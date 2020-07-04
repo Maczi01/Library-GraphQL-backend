@@ -40,7 +40,7 @@ const typeDefs = gql`
         createBookCopy(ownerId: ID!, bookId: ID!, borrowerId: ID): BookCopy
         updateBookCopy(id: ID!, ownerId: ID!, bookId: ID!, borrowerId: ID): BookCopy
         deleteBookCopy(id: ID!): ID
-        
+
         resetData: Boolean
     }
     union Anything= User | Author | Book | BookCopy
@@ -57,6 +57,16 @@ const typeDefs = gql`
         message: String!
     }
     type DeleteUserMutationResult  implements MutationResult{
+        id: ID
+        success: Boolean!
+        message: String!
+    }
+    type AuthorMutationResult implements MutationResult {
+        author: Author
+        success: Boolean!
+        message: String!
+    }
+    type DeleteAuthorMutationResult  implements MutationResult{
         id: ID
         success: Boolean!
         message: String!
