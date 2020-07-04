@@ -220,6 +220,9 @@ const resolvers = {
         },
         Person: {
             __resolveType: resource => resource.resourceType
+        },
+        MutationResult: {
+            __resolveType: null
         }
     }
 ;

@@ -47,17 +47,21 @@ const typeDefs = gql`
     interface Resource {
         id: ID!
     }
-    type UserMutationResult{
-        user: User
-        success: String!
-        message: String!
-    }
-    type DeleteUserMutationResult{
-        id: ID 
+    interface MutationResult {
         success: Boolean!
         message: String!
     }
-    type ResetMutationResult{
+    type UserMutationResult implements MutationResult{
+        user: User
+        success: Boolean!
+        message: String!
+    }
+    type DeleteUserMutationResult  implements MutationResult{
+        id: ID
+        success: Boolean!
+        message: String!
+    }
+    type ResetMutationResult implements MutationResult{
         success: Boolean!
         message: String!
     }
