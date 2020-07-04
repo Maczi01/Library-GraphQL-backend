@@ -52,6 +52,15 @@ const typeDefs = gql`
         success: String!
         message: String!
     }
+    type DeleteUserMutationResult{
+        id: ID 
+        success: Boolean!
+        message: String!
+    }
+    type ResetMutationResult{
+        success: Boolean!
+        message: String!
+    }
     interface Person {
         name:String!
     }

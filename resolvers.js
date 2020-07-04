@@ -97,8 +97,19 @@ const resolvers = {
                 }
             },
             deleteUser: (rootValue, {id}, {db}) => {
-                db.deleteUser(toDbId(id))
-                return id;
+                try {
+                    db.deleteUser(toDbId(id), {name, info})
+                    return {
+                        id,
+                        message: "User was deleted",
+                        success: true
+                    }
+                } catch (e) {
+                    return {
+                        success: false,
+                        message: e.message
+                    }
+                }
             },
             createAuthor: (rootValue, {name, bio}, {db}) => {
                 return db.createAuthor({name, bio});
@@ -139,7 +150,10 @@ const resolvers = {
             },
             resetData: (rootValue, args, {db}) => {
                 db.revertInitialData();
-                return true;
+                return {
+                    success: true,
+                    message: "Successfully restored data"
+                }
             }
         },
         Book: {
