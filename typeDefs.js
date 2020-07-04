@@ -47,6 +47,11 @@ const typeDefs = gql`
     interface Resource {
         id: ID!
     }
+    type UserMutationResult{
+        user: User
+        success: String!
+        message: String!
+    }
     interface Person {
         name:String!
     }

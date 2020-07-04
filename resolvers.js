@@ -68,11 +68,33 @@ const resolvers = {
                 return db.borrowRandom(currentUserDbId)
             },
             createUser: (rootValue, {name, info, email}, {db}) => {
-                return db.createUser({name, info, email});
+                try {
+                    return {
+                        user: db.createUser({name, info, email}),
+                        message: "User was created",
+                        success: true
+                    }
+                } catch (e) {
+                    return {
+                        success: false,
+                        message: e.message
+                    }
+                }
             },
             updateUser: (rootValue, {id, name, info}, {db}) => {
-                db.updateUser(toDbId(id), {name, info})
-                return db.getUserById(toDbId(id))
+                try {
+                    db.updateUser(toDbId(id), {name, info})
+                    return {
+                        user: db.getUserById(toDbId(id)),
+                        message: "User was updated  ",
+                        success: true
+                    }
+                } catch (e) {
+                    return {
+                        success: false,
+                        message: e.message
+                    }
+                }
             },
             deleteUser: (rootValue, {id}, {db}) => {
                 db.deleteUser(toDbId(id))
