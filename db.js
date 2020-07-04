@@ -8,6 +8,9 @@ var knex = require('knex')({
     }
 });
 
+const getAllAuthors = async () => await knex.select('name', 'bio', 'resourceType').from('author');
+const getAllBooks = async () => await knex.select('title', 'description', 'resourceType').from('book');
+const getAllUsers = async () => await knex.select('name', 'info', 'resourceType').from('user');
 
 
 function getAllResourcesByType(resourceType) {
@@ -19,16 +22,11 @@ const getBooksByAuthorId = authorId =>
     getAllBooks().filter(book => book.authorId === authorId);
 
 const getBookById = id => getResourceByIdAndType(id, "Book");
-const getAllBooks = () => getAllResourcesByType("Book");
 
 const getAuthorById = id => getResourceByIdAndType(id, "Author");
 
 
- const getAllAuthors = async () =>  await knex.select('name', 'bio', 'resourceType').from('author')
-;
-
 const getUserById = id => getResourceByIdAndType(id, "User");
-const getAllUsers = () => getAllResourcesByType("User");
 
 const getBookCopyById = id => getResourceByIdAndType(id, "BookCopy");
 const getAllBookCopies = () => getAllResourcesByType("BookCopy");
@@ -304,9 +302,9 @@ const createUser = (userData) => {
 }
 
 const db = {
-    // getAllBooks,
     getAllAuthors,
-    // getAllUsers,
+    getAllBooks,
+    getAllUsers,
     // getBooksByAuthorId,
     // getBookById,
     // getAuthorById,
