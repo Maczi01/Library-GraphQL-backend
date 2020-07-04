@@ -9,33 +9,6 @@ var knex = require('knex')({
 });
 
 
-// function findResourceByIdAndType(id, resourceType) {
-//     const resources = findAllResourcesByType(resourceType);
-//     const resource = resources.find(resource => resource.id === id);
-//     if (!resource) {
-//         throw new Error(`Could not find resource by id '${id}'`);
-//     }
-//     return resource;
-// }
-
-// function findAllResourcesByType(resourceType) {
-//     const resources = data[resourceType];
-//     if (!resources) {
-//         throw new Error(`Unrecognized resource type '${resourceType}'`);
-//     }
-//     return resources;
-// }
-//
-// const getResourceByIdAndType = (id, type) => {
-//     try {
-//         return {
-//             ...findResourceByIdAndType(id, type)
-//         };
-//     } catch (error) {
-//         return null;
-//     }
-// };
-
 
 function getAllResourcesByType(resourceType) {
     return [...findAllResourcesByType(resourceType)];
