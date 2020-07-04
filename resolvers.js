@@ -114,7 +114,7 @@ const resolvers = {
             createAuthor: (rootValue, {name, bio}, {db}) => {
                 try {
                     return {
-                        user: db.createAuthor({name, info, email}),
+                        author: db.createAuthor({name, bio}),
                         message: "Author was created",
                         success: true
                     }
@@ -127,9 +127,9 @@ const resolvers = {
             },
             updateAuthor: (rootValue, {id, name, bio}, {db}) => {
                 try {
-                    db.updateUser(toDbId(id), {name, info})
+                    db.updateUser(toDbId(id), {name, bio})
                     return {
-                        user: db.getAuthorById(toDbId(id)),
+                        author: db.getAuthorById(toDbId(id)),
                         message: "Author was updated  ",
                         success: true
                     }
@@ -141,7 +141,6 @@ const resolvers = {
                 }
             },
             deleteAuthor: (rootValue, {id}, {db}) => {
-
                 try {
                     db.deleteAuthor(toDbId(id), {name, info})
                     return {

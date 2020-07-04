@@ -25,13 +25,13 @@ const typeDefs = gql`
         returnBookCopy(id: ID!): BookCopy!
         borrowRandomBook: BookCopy
 
-        createUser(name: String!, email: String!, info: String!): User
-        updateUser(id: ID!, name: String!,  info: String!): User
-        deleteUser(id: ID!): ID
+        createUser(name: String!, email: String!, info: String!): UserMutationResult!
+        updateUser(id: ID!, name: String!,  info: String!): UserMutationResult!
+        deleteUser(id: ID!): DeleteUserMutationResult
 
-        createAuthor(name: String!, bio: String!): Author
-        updateAuthor(id: ID!, name: String!,  bio: String!): Author
-        deleteAuthor(id: ID!): ID
+        createAuthor(name: String!, bio: String!): AuthorMutationResult!
+        updateAuthor(id: ID!, name: String!,  bio: String!): AuthorMutationResult!
+        deleteAuthor(id: ID!): DeleteAuthorMutationResult!
 
         createBook(title: String!, description: String!): Book
         updateBook(id: ID!, titile: String!,  description: String!): Book
