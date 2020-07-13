@@ -33,16 +33,23 @@ const typeDefs = gql`
         updateAuthor(id: ID!, name: String!,  bio: String!): AuthorMutationResult!
         deleteAuthor(id: ID!): DeleteAuthorMutationResult!
 
-        createBook(title: String!, description: String!): Book
-        updateBook(id: ID!, titile: String!,  description: String!): Book
-        deleteBook(id: ID!): ID
+        createBook(title: String!, description: String!): Book!
+        updateBook(id: ID!, titile: String!,  description: String!): Book!
+        deleteBook(id: ID!): ID!
 
-        createBookCopy(ownerId: ID!, bookId: ID!, borrowerId: ID): BookCopy
-        updateBookCopy(id: ID!, ownerId: ID!, bookId: ID!, borrowerId: ID): BookCopy
-        deleteBookCopy(id: ID!): ID
+        createBookCopy(ownerId: ID!, bookId: ID!, borrowerId: ID): BookCopy!
+        updateBookCopy(id: ID!, ownerId: ID!, bookId: ID!, borrowerId: ID): BookCopy!
+        deleteBookCopy(id: ID!): ID!
 
-        resetData: Boolean
+        resetData: Boolean!
     }
+    input UpdateInputUser {
+        id: ID!
+        name: String!
+        info: String!
+    }
+    
+    
     union Anything= User | Author | Book | BookCopy
     interface Resource {
         id: ID!
