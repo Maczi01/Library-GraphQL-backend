@@ -25,8 +25,8 @@ const typeDefs = gql`
         returnBookCopy(id: ID!): BookCopy!
         borrowRandomBook: BookCopy
 
-        createUser(name: String!, email: String!, info: String!): UserMutationResult!
-        updateUser(id: ID!, name: String!,  info: String!): UserMutationResult!
+        createUser(input: CreateUserInput!): UserMutationResult!
+        updateUser(input: UpdateUserInput!): UserMutationResult!
         deleteUser(id: ID!): DeleteUserMutationResult
 
         createAuthor(name: String!, bio: String!): AuthorMutationResult!
@@ -43,7 +43,12 @@ const typeDefs = gql`
 
         resetData: Boolean!
     }
-    input UpdateInputUser {
+    input UpdateUserInput {
+        id: ID!
+        name: String!
+        info: String!
+    }
+    input CreateUserInput {
         id: ID!
         name: String!
         info: String!

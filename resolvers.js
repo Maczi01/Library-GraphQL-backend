@@ -81,19 +81,19 @@ const resolvers = {
                     }
                 }
             },
-            updateUser: (rootValue, {id, name, info}, {db}) => {
+            updateUser: (rootValue, { input: { id, name, info } }, { db }) => {
                 try {
-                    db.updateUser(toDbId(id), {name, info})
+                    db.updateUser(toDbId(id), { name, info });
                     return {
-                        user: db.getUserById(toDbId(id)),
-                        message: "User was updated  ",
-                        success: true
-                    }
-                } catch (e) {
+                        success: true,
+                        message: "User successfully updated.",
+                        user: db.getUserById(toDbId(id))
+                    };
+                } catch (error) {
                     return {
                         success: false,
-                        message: e.message
-                    }
+                        message: error.message
+                    };
                 }
             },
             deleteUser: (rootValue, {id}, {db}) => {
