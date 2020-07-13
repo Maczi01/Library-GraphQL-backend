@@ -67,10 +67,10 @@ const resolvers = {
             borrowRandomBook: (rootValue, {id}, {db, currentUserDbId}) => {
                 return db.borrowRandom(currentUserDbId)
             },
-            createUser: (rootValue, {name, info, email}, {db}) => {
+            createUser: (rootValue, {input}, {db}) => {
                 try {
                     return {
-                        user: db.createUser({name, info, email}),
+                        user: db.createUser({input}),
                         message: "User was created",
                         success: true
                     }
@@ -81,13 +81,13 @@ const resolvers = {
                     }
                 }
             },
-            updateUser: (rootValue, { input: { id, name, info } }, { db }) => {
+            updateUser: (rootValue, {input: {id, name, info}}, {db}) => {
                 try {
-                    db.updateUser(toDbId(id), { name, info });
+                    db.updateUser(toDbId(id), {name, info});
                     return {
+                        user: db.getUserById(toDbId(id)),
                         success: true,
                         message: "User successfully updated.",
-                        user: db.getUserById(toDbId(id))
                     };
                 } catch (error) {
                     return {
@@ -111,10 +111,10 @@ const resolvers = {
                     }
                 }
             },
-            createAuthor: (rootValue, {name, bio}, {db}) => {
+            createAuthor: (rootValue, {input}, {db}) => {
                 try {
                     return {
-                        author: db.createAuthor({name, bio}),
+                        author: db.createAuthor(input),
                         message: "Author was created",
                         success: true
                     }
@@ -125,18 +125,18 @@ const resolvers = {
                     }
                 }
             },
-            updateAuthor: (rootValue, {id, name, bio}, {db}) => {
+            updateAuthor: (rootValue, {input: {id, name, bio}}, {db}) => {
                 try {
-                    db.updateUser(toDbId(id), {name, bio})
+                    db.updateAuthor(toDbId(id), {name, bio})
                     return {
                         author: db.getAuthorById(toDbId(id)),
                         message: "Author was updated  ",
                         success: true
                     }
-                } catch (e) {
+                } catch (error) {
                     return {
                         success: false,
-                        message: e.message
+                        message: `${error.message} llll`
                     }
                 }
             },

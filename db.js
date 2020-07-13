@@ -725,11 +725,14 @@ const updateBook = (id, bookData) => {
 };
 
 const updateAuthor = (id, authorData) => {
-    const {name, photoPath, bio} = authorData;
-    if (!getAuthorById(authorId)) {
-        throw new Error(`Author needs valid  id ! ${authorId} `)
+    const {name, bio} = authorData;
+    if (!name || name.length < 1) {
+        throw new Error("Author must have a name!")
     }
-    updateResource(id, "Author", {name, photoPath, bio})
+    if (!bio || bio.length < 1) {
+        throw new Error("Author must have a info!")
+    }
+    updateResource(id, "Author", {name, bio})
 };
 
 const updateResource = (id, resourceType, resourceData) => {
@@ -806,7 +809,7 @@ const createAuthor = (authorData) => {
         throw new Error("Author must have a bio!")
     }
     const photoPath = PHOTO_PATHS[Math.floor(Math.random() * PHOTO_PATHS.length)]
-    return createResource("Author", {name, photoPath, bio, photoPath})
+    return createResource("Author", {name, photoPath, bio})
 }
 
 const createBook = (bookData) => {

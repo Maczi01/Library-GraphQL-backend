@@ -29,8 +29,8 @@ const typeDefs = gql`
         updateUser(input: UpdateUserInput!): UserMutationResult!
         deleteUser(id: ID!): DeleteUserMutationResult
 
-        createAuthor(name: String!, bio: String!): AuthorMutationResult!
-        updateAuthor(id: ID!, name: String!,  bio: String!): AuthorMutationResult!
+        createAuthor(input: CreateAuthorInput!): AuthorMutationResult!
+        updateAuthor(input: UpdateAuthorInput!): AuthorMutationResult!
         deleteAuthor(id: ID!): DeleteAuthorMutationResult!
 
         createBook(title: String!, description: String!): Book!
@@ -49,12 +49,20 @@ const typeDefs = gql`
         info: String!
     }
     input CreateUserInput {
-        id: ID!
         name: String!
         info: String!
+        email: String!
     }
-    
-    
+    input UpdateAuthorInput {
+        id: ID!
+        name: String!
+        bio: String!
+    }
+    input CreateAuthorInput {
+        name: String!
+        bio: String!
+    }
+       
     union Anything= User | Author | Book | BookCopy
     interface Resource {
         id: ID!
