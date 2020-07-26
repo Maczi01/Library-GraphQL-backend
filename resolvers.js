@@ -98,7 +98,7 @@ const resolvers = {
             },
             deleteUser: (rootValue, {id}, {db}) => {
                 try {
-                    db.deleteUser(toDbId(id), {name, info})
+                    db.deleteUser(toDbId(id))
                     return {
                         id,
                         message: "User was deleted",
@@ -142,7 +142,7 @@ const resolvers = {
             },
             deleteAuthor: (rootValue, {id}, {db}) => {
                 try {
-                    db.deleteAuthor(toDbId(id), {name, info})
+                    db.deleteAuthor(toDbId(id))
                     return {
                         id,
                         message: "Author was deleted",

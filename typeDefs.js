@@ -41,7 +41,7 @@ const typeDefs = gql`
         updateBookCopy(id: ID!, ownerId: ID!, bookId: ID!, borrowerId: ID): BookCopy!
         deleteBookCopy(id: ID!): ID!
 
-        resetData: Boolean!
+        resetData: ResetMutationResult!
     }
     input UpdateUserInput {
         id: ID!
@@ -91,7 +91,7 @@ const typeDefs = gql`
         success: Boolean!
         message: String!
     }
-    type ResetMutationResult implements MutationResult{
+    type ResetMutationResult {
         success: Boolean!
         message: String!
     }
